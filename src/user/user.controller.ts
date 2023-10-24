@@ -8,13 +8,13 @@ import {
     Post,
   } from '@nestjs/common';
   import { UserService } from './user.service';
-  import { User } from './user.schema';
+  import { User } from './schemas/user.schema';
   @Controller('user')
   export class UserController {
     constructor(private readonly userService: UserService) {}
     @Post()
-    create(@Body() data: User) {
-      return this.userService.create(data);
+    create(@Body() user: User) {
+      return this.userService.create(user);
     }
     @Get()
     findAll() {
