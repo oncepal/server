@@ -5,14 +5,12 @@ export type UserDocument = HydratedDocument<User>;
 
 @Schema({ timestamps: true })
 export class User {
-
-    @Prop()
+    @Prop({ required: true })
     name: string;
     @Prop({ required: true })
-    weChatAccount: string
+    wxAccount: string
     @Prop()
     age: number;
-   
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
