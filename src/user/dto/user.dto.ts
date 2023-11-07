@@ -1,26 +1,27 @@
-import { User } from "../schemas/user.schema";
 
+import { IsString, IsNumber, IsNotEmpty } from 'class-validator';
 export class CreateUserDto {
-    readonly name: string;
-    readonly wxAccount: string;
-    readonly age: string;
+  @IsNotEmpty({ message: '请输入用户名' })
+  @IsString()
+  name: string;
+  @IsString()
+  vx: string;
+  @IsString()
+  phoneNumber: string
+  @IsNotEmpty({ message: '请输入年龄' })
+  @IsNumber()
+  age: number;
 }
 
-export class UserProfileDto {
-    name: string;
-    wxAccount: string;
-    age:string
-}
-
-
-export function getUserProfile(users:User[]){
-   return users.map(u => {
-        const userProfile = new UserProfileDto();
-        for (const key in userProfile) {
-          if (Object.prototype.hasOwnProperty.call(userProfile, key)) {
-            userProfile[key] = u[key];
-          }
-        }
-        return userProfile
-      })
+export class UpdateUserDto {
+  @IsNotEmpty({ message: '请输入用户名' })
+  @IsString()
+  name: string;
+  @IsString()
+  vx: string;
+  @IsString()
+  phoneNumber: string
+  @IsNotEmpty({ message: '请输入年龄' })
+  @IsNumber()
+  age: number;
 }
