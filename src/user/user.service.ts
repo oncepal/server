@@ -1,8 +1,8 @@
-import { User, UserDocument } from './schemas/user.schema';
+import { User, UserDocument } from './user.schema';
 import { InjectModel } from '@nestjs/mongoose';
 import { Injectable } from '@nestjs/common';
 import { Model } from 'mongoose';
-import { CreateUserDto, UpdateUserDto } from './dto/user.dto';
+import { CreateUserDto, UpdateUserDto } from './user.dto';
 @Injectable()
 export class UserService {
     constructor(@InjectModel(User.name) private model: Model<User>) {}
@@ -15,8 +15,11 @@ export class UserService {
     return await this.model.find();
    
   }
-  findOne(id: string) {
+  findOneById(id: string) {
     return this.model.findById(id);
+  }
+  findOne(user:Record<string,any>) {
+    return this.model.findOne(user);
   }
   update(id: string, user: UpdateUserDto) {
     return this.model.findByIdAndUpdate(id, user, { new: true });

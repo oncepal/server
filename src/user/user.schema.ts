@@ -5,7 +5,8 @@ export type UserDocument = HydratedDocument<User>;
 /**
  * 用户模型
  * @param id 用户唯一id
- * @param vx 微信号 SylasXu
+ * @param wxAccount 微信号 SylasXu
+ * @param wxName 微信名 Sylas
  * @param avatar 头像 
  * @param phoneNumber 手机号 13996092354
  * @param weight 体重 70（kg）
@@ -35,7 +36,10 @@ export class User {
     @Prop()
     name: string;
     @Prop()
-    vx: string
+    wxAccount: string
+    @Prop()
+    wxName: string
+
     @Prop()
     age: number;
     @Prop()

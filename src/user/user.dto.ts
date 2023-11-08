@@ -1,16 +1,16 @@
 
 import { IsString, IsNumber, IsNotEmpty } from 'class-validator';
 export class CreateUserDto {
-  @IsNotEmpty({ message: '请输入用户名' })
+  @IsNotEmpty()
   @IsString()
-  name: string;
+  wxAccount: string;
+  @IsNotEmpty()
   @IsString()
-  vx: string;
+  wxName: string;
+
   @IsString()
   phoneNumber: string
-  @IsNotEmpty({ message: '请输入年龄' })
-  @IsNumber()
-  age: number;
+
 }
 
 export class UpdateUserDto {
@@ -18,7 +18,7 @@ export class UpdateUserDto {
   @IsString()
   name: string;
   @IsString()
-  vx: string;
+  wxAccount: string;
   @IsString()
   phoneNumber: string
   @IsNotEmpty({ message: '请输入年龄' })
