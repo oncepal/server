@@ -7,7 +7,7 @@ export class GetPalListDto {
     @IsNotEmpty()
     wxName:string
 }
-export class RegisterDto {
+export class CreatePalDto {
     @IsNotEmpty()
     wxAccount:string;
     @IsNotEmpty()
