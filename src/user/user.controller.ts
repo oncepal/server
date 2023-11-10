@@ -3,15 +3,16 @@ import {
   Controller,
   Delete,
   Get,
-  Param,
+  Param,Query,
   Patch,
   Post,
   UseGuards,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { User } from './user.schema';
-import { CreateUserDto,UpdateUserDto } from './user.dto';
+import { CreateUserDto,FindUserDto,UpdateUserDto } from './user.dto';
 import { AuthGuard } from 'src/auth/auth.guard';
+
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) { }
@@ -26,6 +27,15 @@ export class UserController {
   findAll() {
     return this.userService.find();
   }
+
+  @Get('find')
+  find(@Query('filter') filter:FindUserDto){
+    console.log(filter);
+    
+    return filter
+    return this.userService.find(filter)
+  }
+
   @Get(':id')
   findOneById(@Param('id') id: string) {
     return this.userService.findOneById(id);

@@ -1,4 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { IsBoolean, IsNumber, IsString } from 'class-validator';
 import { HydratedDocument } from 'mongoose';
 
 export type UserDocument = HydratedDocument<User>;
@@ -34,12 +35,13 @@ export type UserDocument = HydratedDocument<User>;
 @Schema({ timestamps: true })
 export class User {
     @Prop()
+    _id:string
+    @Prop()
     name: string;
     @Prop()
     wxAccount: string
     @Prop()
     wxName: string
-
     @Prop()
     age: number;
     @Prop()

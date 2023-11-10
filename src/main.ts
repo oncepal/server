@@ -5,7 +5,11 @@ import { HttpExceptionFilter } from './common/filter/httpException.filter';
 import { ValidationPipe } from '@nestjs/common';
 async function starter() {
   const app = await NestFactory.create(AppModule);
-  app.useGlobalPipes(new ValidationPipe());
+  app.useGlobalPipes(new ValidationPipe({
+    disableErrorMessages: true,
+    whitelist: true,
+    transform: true,
+  }));
   app.useGlobalFilters(new HttpExceptionFilter());
   app.useGlobalInterceptors(new ResponseInterceptor())
   await app.listen(3001);

@@ -2,15 +2,15 @@ import { User, UserDocument } from './user.schema';
 import { InjectModel } from '@nestjs/mongoose';
 import { Injectable } from '@nestjs/common';
 import { Model } from 'mongoose';
-import { CreateUserDto, UpdateUserDto } from './user.dto';
+import { CreateUserDto, FindUserDto,UpdateUserDto } from './user.dto';
 @Injectable()
 export class UserService {
     constructor(@InjectModel(User.name) private model: Model<User>) {}
 
-  create(user: CreateUserDto) {
+  create(user: Partial<CreateUserDto>) {
     return this.model.create(user);
   }
-   find(user?:Record<string,any>) {
+   find(user?:Partial<FindUserDto>) {
 
     return this.model.find(user);
    

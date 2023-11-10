@@ -1,27 +1,13 @@
 
 import { IsString, IsNumber, IsNotEmpty } from 'class-validator';
-export class CreateUserDto {
-
-  @IsString()
-  wxAccount: string;
-
-  @IsString()
-  wxName: string;
-
-  @IsString()
-  phoneNumber: string
-
+import {User} from './user.schema'
+import {PartialType} from '@nestjs/mapped-types'
+export class CreateUserDto extends User{
+}
+export class FindUserDto extends User{
 }
 
-export class UpdateUserDto {
-
-  @IsString({ message: '请输入用户名' })
-  name: string;
+export class UpdateUserDto extends PartialType(User){
   @IsString()
-  wxAccount: string;
-  @IsString()
-  phoneNumber: string
-  
-  @IsNumber()
-  age: number;
+  id:string
 }
