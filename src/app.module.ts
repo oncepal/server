@@ -6,8 +6,9 @@ import { UserModule } from './user/user.module';
 import { LoggerMiddleware } from './common/middleware/logger.middleware';
 import { AuthModule } from './auth/auth.module';
 import { PalModule } from './pal/pal.module';
+import { StatisticModule } from './statistic/statistic.module';
 @Module({
-  imports: [PalModule,UserModule, MongooseModule.forRoot('mongodb://localhost:27017/ss'), AuthModule],
+  imports: [StatisticModule, PalModule,UserModule, MongooseModule.forRoot('mongodb://localhost:27017/oncepal'), AuthModule],
   controllers: [AppController],
   providers: [AppService],
   

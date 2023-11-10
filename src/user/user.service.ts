@@ -10,9 +10,9 @@ export class UserService {
   create(user: CreateUserDto) {
     return this.model.create(user);
   }
-  async findAll() {
+   find(user?:Record<string,any>) {
 
-    return await this.model.find();
+    return this.model.find(user);
    
   }
   findOneById(id: string) {

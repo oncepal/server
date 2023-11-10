@@ -24,21 +24,21 @@ export class UserController {
  
   @Get()
   findAll() {
-    return this.userService.findAll();
+    return this.userService.find();
   }
-  @Get('/:id')
+  @Get(':id')
   findOneById(@Param('id') id: string) {
     return this.userService.findOneById(id);
   }
 
   @UseGuards(AuthGuard)
-  @Patch('/:id')
+  @Patch(':id')
   update(@Param('id') id: string, @Body() data: UpdateUserDto) {
     return this.userService.update(id, data);
   }
 
   @UseGuards(AuthGuard)
-  @Delete('/:id')
+  @Delete(':id')
   remove(@Param('id') id: string) {
     return this.userService.delete(id);
   }

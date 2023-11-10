@@ -1,17 +1,17 @@
 import { IsString, IsNumber, IsNotEmpty } from 'class-validator';
 export class SignInDto {
-    @IsNotEmpty()
+    @IsString()
     wxAccount:string;
-    @IsNotEmpty()
+    @IsString()
     phoneNumber:string
-    @IsNotEmpty()
+    @IsString()
     wxName:string
 }
 export class RegisterDto {
-    @IsNotEmpty()
+    @IsString()
     wxAccount:string;
-    @IsNotEmpty()
+    @IsString()
     phoneNumber:string
-    @IsNotEmpty()
+    @IsString()
     wxName:string
 }
