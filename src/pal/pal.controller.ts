@@ -1,4 +1,4 @@
-import { Body, Request,Controller, Post, HttpCode, HttpStatus, Get, UseGuards, Delete, Param, Patch } from '@nestjs/common';
+import { Body, Request,Controller, Post, HttpCode, HttpStatus, Get, UseGuards, Delete, Param, Patch, Req } from '@nestjs/common';
 import { PalService } from './pal.service';
 
 import {FindPalDto,  CreatePalDto,UpdatePalDto } from './pal.dto';
@@ -19,8 +19,9 @@ export class PalController {
   }
   
   @Get(':filter')
-  find(@Body() filter: FindPalDto) {
-    return filter;
+  find(@Req() request: Request ) {
+   
+    return request;
   }
 
   @UseGuards(AuthGuard)

@@ -3,10 +3,12 @@ import {
   Controller,
   Delete,
   Get,
-  Param,Query,
+  Param,Request,
   Patch,
   Post,
   UseGuards,
+  Req,
+  Query,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { User } from './user.schema';
@@ -29,11 +31,9 @@ export class UserController {
   }
 
   @Get('find')
-  find(@Query('filter') filter:FindUserDto){
-    console.log(filter);
-    
-    return filter
-    return this.userService.find(filter)
+  find(@Query('filter') filter:string){
+    const f = JSON.parse(filter)
+    return this.userService.find(f)
   }
 
   @Get(':id')

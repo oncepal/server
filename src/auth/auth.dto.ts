@@ -1,17 +1,21 @@
-import { IsString, IsNumber, IsNotEmpty } from 'class-validator';
+import { IsString, IsNumber, IsNotEmpty, Length } from 'class-validator';
 export class SignInDto {
-    @IsString()
-    wxAccount:string;
+    @Length(11,11,{message:'请输入11位手机号码'})
     @IsString()
     phoneNumber:string
+}
+
+export class WXSignInDto{
+    @Length(11,11,{message:'请输入11位code'})
     @IsString()
-    wxName:string
+    code:string
+
+    @Length(11,11,{message:'请输入11位appid'})
+    @IsString()
+    appId:string
 }
 export class RegisterDto {
-    @IsString()
-    wxAccount:string;
+    @Length(11)
     @IsString()
     phoneNumber:string
-    @IsString()
-    wxName:string
 }

@@ -11,5 +11,5 @@ export class StatisticService {
         return this.model.find(filter);
     }
    
-   
+    
 }
