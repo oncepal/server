@@ -9,6 +9,7 @@ export type UserDocument = HydratedDocument<User>;
  * @param wxAccount 微信号 SylasXu
  * @param wxName 微信名 Sylas
  * @param avatar 头像 
+ * @param horoscope 星座 0白羊座 1金牛座 2双子座 3巨蟹座 4狮子座 5处女座 6天秤座 7天蝎座 8射手座 9魔羯座 10水瓶座 11双鱼座
  * @param phoneNumber 手机号 13996092354
  * @param weight 体重 70（kg）
  * @param height 身高 178
@@ -42,7 +43,8 @@ export class User {
     wxName: string
     @Prop()
     age: number;
-    
+    @Prop()
+    horoscope:number
     @Length(11,11,{message:'请输入11位手机号码'})
     @IsString()
     @Prop()
