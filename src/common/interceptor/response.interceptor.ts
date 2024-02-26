@@ -10,15 +10,20 @@ import {
   @Injectable()
   export class ResponseInterceptor implements NestInterceptor {
     intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
-      const response = context.switchToHttp().getResponse<Response>();
+        console.log("准备返回请求");
+        const response = context.switchToHttp().getResponse<Response>();
+    
    
       return next.handle().pipe(
         map(data => {
-          return {
+          const r = {
             data,
             code:  response.statusCode,
             message: '请求成功',
           };
+          console.log("返回请求:");
+          console.log(r);
+          return r
         }),
       );
     }

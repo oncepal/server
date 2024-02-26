@@ -1,14 +1,15 @@
-
 import { IsString, IsNumber, IsNotEmpty } from 'class-validator';
 import { User } from './user.schema'
-import { PartialType, IntersectionType } from '@nestjs/mapped-types'
+import { OmitType,PartialType, IntersectionType } from '@nestjs/mapped-types'
 import { IdDto } from 'src/common/dto/common.dto';
+export class UserWithoutWeChatInfo extends OmitType(PartialType(User),['wechatInfo'])
+{}
 
 export class UpdateUserDto extends
-  IntersectionType(PartialType(User), IdDto) {
+UserWithoutWeChatInfo {
 }
-export class CreateUserDto extends PartialType(User) {
+export class CreateUserDto extends UserWithoutWeChatInfo {
 }
-export class FindUserDto extends CreateUserDto {
+export class FindUserDto extends UserWithoutWeChatInfo {
 }
 
