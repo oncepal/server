@@ -24,13 +24,13 @@ export class PalController {
     return request;
   }
 
-  @UseGuards(AuthGuard)
+  // @UseGuards(AuthGuard)
   @Patch(':id')
   update(@Param('id') id: string, @Body() data: UpdatePalDto) {
     return this.palService.update(id, data);
   }
 
-  @UseGuards(AuthGuard)
+  // @UseGuards(AuthGuard)
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.palService.delete(id);

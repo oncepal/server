@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { IsBoolean, IsNumber, IsString, Length } from 'class-validator';
-import { HydratedDocument } from 'mongoose';
+import { HydratedDocument, SchemaTypes, Types } from 'mongoose';
 export class WeChatInfo  {
     name: string
     account: string
@@ -20,10 +20,17 @@ export type UserDocument = HydratedDocument<User>;
  * @param sex 1-男 0-女
  * @param introduction 自我介绍
  */
-@Schema({ timestamps: true })
+
+@Schema({ timestamps: true ,toJSON: {
+    transform: (doc: UserDocument, ret) => {
+        delete ret.__v;
+        ret.id = ret._id;
+        delete ret._id;
+    }
+} })
 export class User {
     @Prop()
-    id: string
+    id:string
     @Prop()
     avatar: string
     @Prop()

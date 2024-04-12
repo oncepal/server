@@ -2,29 +2,39 @@ import { User, UserDocument } from './user.schema';
 import { InjectModel } from '@nestjs/mongoose';
 import { Injectable } from '@nestjs/common';
 import { Model } from 'mongoose';
-import { CreateUserDto, FindUserDto,UpdateUserDto } from './user.dto';
+import { CreateUserDto,UpdateUserDto } from './user.dto';
 @Injectable()
 export class UserService {
     constructor(@InjectModel(User.name) private model: Model<User>) {}
 
-  create(user: Partial<CreateUserDto>) {
-    return this.model.create(user);
-  }
-   find(user?:Partial<FindUserDto>) {
+  async create(user: Partial<CreateUserDto>) {
 
-    return this.model.find(user);
+    return await this.model.create(user);
+  }
+   async find(user?:{}) {
+    const users = await this.model.find(user).exec();
+    
+    return users;
    
+  } 
+  async findOneById(id: string) {
+    return await this.model.findById(id).exec();
   }
-  findOneById(id: string) {
-    return this.model.findById(id);
+  async findOneByPhoneNumber(phoneNumber: string) {
+    return await  this.model.findOne({phoneNumber}).exec();
   }
-  findOne(user:Record<string,any>) {
-    return this.model.findOne(user);
+  async findOne(user:Record<string,any>) {
+    return await  this.model.findOne(user).exec();
   }
-  update(id: string, user: UpdateUserDto) {
-    return this.model.findByIdAndUpdate(id, user, { new: true });
+  async update( user: UpdateUserDto) {
+    console.log("user.id",user);
+     
+    return await this.model.findByIdAndUpdate(user.id, user, { new: true }).exec();
   }
-  delete(id: string) {
-    return this.model.findByIdAndRemove(id);
+  async delete(id: string) {
+    return await this.model.findByIdAndRemove(id).exec();
+  }
+  async deleteAll() {
+    return await this.model.deleteMany();
   }
 }

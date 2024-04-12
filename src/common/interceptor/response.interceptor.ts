@@ -1,30 +1,46 @@
 import {
-    CallHandler,
-    ExecutionContext,
-    Injectable,
-    NestInterceptor,
-  } from '@nestjs/common';
-  import { Observable } from 'rxjs';
-  import { map } from 'rxjs/operators';
-  import { Response } from 'express';
-  @Injectable()
-  export class ResponseInterceptor implements NestInterceptor {
-    intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
-        console.log("准备返回请求");
-        const response = context.switchToHttp().getResponse<Response>();
+  CallHandler,
+  ExecutionContext,
+  Injectable,
+  NestInterceptor,
+  RequestTimeoutException,
+} from '@nestjs/common';
+import { Observable, TimeoutError, throwError } from 'rxjs';
+import { catchError, map, timeout } from 'rxjs/operators';
+import { Response, Request } from 'express';
+
+@Injectable()
+export class ResponseInterceptor implements NestInterceptor {
+  intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
+
+    const res = context.switchToHttp().getResponse<Response>();
+    const {method} = context.switchToHttp().getRequest<Request>()
+    console.log(res);
     
-   
-      return next.handle().pipe(
-        map(data => {
-          const r = {
-            data,
-            code:  response.statusCode,
-            message: '请求成功',
-          };
-          console.log("返回请求:");
-          console.log(r);
-          return r
-        }),
-      );
-    }
+    // console.log("res",res.getHeaders()); console.log("res",res.getHeaders());
+
+    return next.handle().pipe(
+      timeout(5000),
+      catchError(err => {
+        if (err instanceof TimeoutError) {
+          return throwError(() => new RequestTimeoutException());
+        }
+        return throwError(() => err);
+      }),
+      map(data => {
+
+        const r = {
+
+          data,
+          code: res.statusCode,
+          message: res.statusCode == 200?'请求成功':'请求失败',
+        };
+
+
+        return r
+      }),
+    );
+
+
   }
+}

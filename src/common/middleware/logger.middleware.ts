@@ -6,22 +6,27 @@ import { Request, Response, NextFunction } from 'express';
 @Injectable()
 export class LoggerMiddleware implements NestMiddleware {
   use(req: Request, res: Response, next: NextFunction) {
-    console.log(`接口${req.baseUrl}收到${req.method}请求`);
-    console.log('参数：')
+    const now = Date.now();
+    console.log(`接口${req.baseUrl}收到${req.method}请求参数：`);
     switch (req.method) {
       case 'GET':
         if (Object.keys(req.query).length > 0)
-          console.log(req.query);
+          console.log("req.query",req.query);
         break;
-      case 'POST':
-      case 'PUT':
-        console.log(req.body);
+      case 'POST': console.log("req.body",req.body);
+      break;
+      case 'PATCH':
+        console.log("req.params",req.params)
+        console.log("req.body",req.body);
         break;
-
-      default: console.log(req.params)
+      case 'DELETE':
+          console.log("req.params",req.params)
+          break;
+      default:
         break;
     }
-
+    console.log('耗时'+(Date.now() - now)+'ms');
+    
     next();
 
   }

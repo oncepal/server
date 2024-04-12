@@ -15,6 +15,7 @@ import { StatisticModule } from './statistic/statistic.module';
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
+    //全局日志监听
     consumer
       .apply(LoggerMiddleware)
       .forRoutes('user','pal','auth','statistic');
