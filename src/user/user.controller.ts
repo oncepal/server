@@ -34,7 +34,6 @@ export class UserController {
 
     if (user?.phoneNumber) {
       const existingUser = await this.userService.findOneByPhoneNumber(user?.phoneNumber)
-      console.log("user",!existingUser);
       
       if (!existingUser) {
         const res = this.userService.create(user)
