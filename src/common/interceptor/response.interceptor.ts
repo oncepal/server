@@ -15,19 +15,11 @@ export class ResponseInterceptor implements NestInterceptor {
 
     const res = context.switchToHttp().getResponse<Response>();
     const {method} = context.switchToHttp().getRequest<Request>()
-    console.log(res);
+    console.log(res.statusCode);
     
     // console.log("res",res.getHeaders()); console.log("res",res.getHeaders());
 
-    return next.handle().pipe(
-      timeout(5000),
-      catchError(err => {
-        if (err instanceof TimeoutError) {
-          return throwError(() => new RequestTimeoutException());
-        }
-        return throwError(() => err);
-      }),
-      map(data => {
+    return next.handle().pipe( map(data => {
 
         const r = {
 
@@ -39,6 +31,14 @@ export class ResponseInterceptor implements NestInterceptor {
 
         return r
       }),
+      timeout(5000),
+      catchError(err => {
+        if (err instanceof TimeoutError) {
+          return throwError(() => new RequestTimeoutException());
+        }
+        return throwError(() => err);
+      }),
+     
     );
 
 

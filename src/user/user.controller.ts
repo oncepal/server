@@ -3,7 +3,8 @@ import {
   Controller,
   Delete,
   Get,
-  Param, Request,
+  Param,
+  Request,
   Post,
   UseGuards,
   Req,
@@ -12,15 +13,18 @@ import {
   HttpCode,
   UsePipes,
   ValidationPipe,
+  Header,
+  Res,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { User } from './user.schema';
 import { CreateUserDto, UpdateUserDto } from './user.dto';
 import { AuthGuard } from 'src/auth/auth.guard';
-
+import { Response } from 'express';
+import { error } from 'src/common/utils';
 @Controller('user')
 export class UserController {
-  constructor(private readonly userService: UserService) { }
+  constructor(private readonly userService: UserService) {}
 
   /**
    * 创建用户
@@ -29,18 +33,19 @@ export class UserController {
    */
   // @UseGuards(AuthGuard)
   @Post()
-  // @UsePipes(new ValidationPipe({ transform: true }))
-  async create(@Body() user: CreateUserDto) {
-
+  @Header('content-type', 'application/json')
+  async create(@Body() user: CreateUserDto, @Res() res: Response) {
     if (user?.phoneNumber) {
-      const existingUser = await this.userService.findOneByPhoneNumber(user?.phoneNumber)
-      
-      if (!existingUser) {
-        const res = this.userService.create(user)
-        return res;
-      }else throw new Error()
-    } else throw new Error()
+      const existingUser = await this.userService.findOneByPhoneNumber(
+        user?.phoneNumber,
+      );
 
+      if (!existingUser) {
+        const res = this.userService.create(user);
+        return res;
+      } else {
+        return error(res,500,'已存在该用户！') ;}
+    } else return error(res,500,'缺少手机号！');
   }
 
   /**
@@ -50,8 +55,8 @@ export class UserController {
    */
   @Get()
   async findAll(@Query('filter') filter: string) {
-    const f = JSON.parse(filter)
-    const r = await this.userService.find(f)
+    const f = JSON.parse(filter);
+    const r = await this.userService.find(f);
     return r;
   }
 
@@ -59,37 +64,35 @@ export class UserController {
    * 查询用户详情
    * @param id 用户id
    * @returns 用户详情对象
-   */ 
+   */
   @Get(':id')
   async findOneById(@Param('id') id: string) {
     return await this.userService.findOneById(id);
-  } 
+  }
 
   /**
    * 修改用户信息
-   * @param id 用户id
-   * @body data 用户信息
+   * @body 用户信息
    * @returns 修改后的用户信息
    */
   // @UseGuards(AuthGuard)
   @Patch()
   async update(@Body() user: UpdateUserDto) {
-    console.log(user);
-    
+
     const r = await this.userService.update(user);
-    if(!r) throw new Error()
-    return r 
+    if (!r) throw new Error();
+    return r;
   }
 
   /**
    * 删除用户
    * @param id 用户id
-   * @returns 修改成功与否
+   * @returns 删除成功与否
    */
   // @UseGuards(AuthGuard)
   @Delete(':id')
   async remove(@Param('id') id: string) {
     const r = await this.userService.delete(id);
-    return r
+    return r;
   }
 }

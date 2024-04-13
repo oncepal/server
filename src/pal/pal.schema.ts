@@ -1,40 +1,51 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { HydratedDocument } from 'mongoose';
-
-export type PalDocument = HydratedDocument<Pal>;
+import mongoose, { HydratedDocument } from 'mongoose';
+/**
+ * @param number 可参与人数
+ * @param minAge 可参与最小搭子年龄
+ * @param sex 性别 0女性 1男性 2都可以
+ */
+export type PalLimits = {number:number,minAge:number,sex:number}
+export type HitchDocument = HydratedDocument<Hitch>;
 
 @Schema({ timestamps: true })
 /**
- * 搭子活动模型
- * @param type 需求搭子类型 “饭”，“livehouse”
- * @param time 时间 2023.11-30
+ * 搭子需求模型
+ * @param time 时间 2023-11-30 hh:mm
  * @param location 地点 “大坪”
  * @param description 具体描述介绍 “有没有....”
- * @param img 图片 
+ * @param images 图片 
  * @param promoterId 发起人的id SylasXu
- * @param participantLimit 参与者人数限制 4
- * @param participantIds 参与者们的id SylasXu huangqian
- * @param paymentMethod 支付方式 0-AA 1-提前收款
+ * @param palLimits 参与者人数限制 4
+ * @param palIds 参与者们的id数组
+ * @param paymentMethod 支付方式 0-无需费用 1-承担自己费用
  */
-export class Pal {
+@Schema({ timestamps: true ,toJSON: {
+    transform: (doc: HitchDocument, ret) => {
+        delete ret.__v;
+        ret.id = ret._id;
+        delete ret._id;
+    }
+} })
+export class Hitch {
     @Prop()
-    type: string;
+    id: string;
     @Prop()
     time: string;
     @Prop()
     location: string;
     @Prop()
-    img: Array<string>;
+    images: Array<string>;
     @Prop()
     description: string;
     @Prop()
-    promoterId: string;
+    creatorId: string;
     @Prop()
-    participantIds: Array<string>;
+    palIds: Array<string>;
+    @Prop( {type:mongoose.Schema.Types.Map})
+    palLimits:PalLimits
     @Prop()
     paymentMethod:number
-    @Prop()
-    participantLimit:number
 }
 
-export const PalSchema = SchemaFactory.createForClass(Pal);
+export const HitchSchema = SchemaFactory.createForClass(Hitch);
