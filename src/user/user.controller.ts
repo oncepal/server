@@ -17,36 +17,61 @@ import {
   Res,
 } from '@nestjs/common';
 import { UserService } from './user.service';
-import { User } from './user.schema';
+import { CommentService } from './comment.service';
+
 import { CreateUserDto, UpdateUserDto } from './user.dto';
+import { CreateCommentDto, UpdateCommentDto } from './comment.dto';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { Response } from 'express';
 import { error } from 'src/common/utils';
 @Controller('user')
 export class UserController {
-  constructor(private readonly userService: UserService) {}
+  constructor(private readonly userService: UserService, private readonly commentService: CommentService) { }
 
   /**
    * 创建用户
-   * @body user 用户信息
+   * @body userInfo 用户信息
    * @returns 创建好的用户信息
    */
   // @UseGuards(AuthGuard)
   @Post()
   @Header('content-type', 'application/json')
-  async create(@Body() user: CreateUserDto, @Res() res: Response) {
-    if (user?.phoneNumber) {
+  async createUser(@Body() userInfo: CreateUserDto, @Res() res: Response) {
+    if (userInfo?.phoneNumber) {
       const existingUser = await this.userService.findOneByPhoneNumber(
-        user?.phoneNumber,
+        userInfo?.phoneNumber,
       );
 
       if (!existingUser) {
-        const res = this.userService.create(user);
+        const res = this.userService.create(userInfo);
         return res;
       } else {
-        return error(res,500,'已存在该用户！') ;}
-    } else return error(res,500,'缺少手机号！');
+        return error(res, 500, '已存在该用户！');
+      }
+    } else return error(res, 500, '缺少手机号！');
   }
+
+
+  /**
+   * 新增用户评论
+   * @body commentInfo 评论信息
+   * @returns 创建好的评论信息
+   */
+  // @UseGuards(AuthGuard)
+  @Post('/comment')
+  @Header('content-type', 'application/json')
+  async createComment(@Body() commentInfo: CreateCommentDto, @Res() res: Response) {
+    if (!commentInfo?.commentatorId) {
+      return error(res, 500, '缺少评论人id！');
+    }
+    if (!commentInfo?.commentedUserId) {
+      return error(res, 500, '缺少被评论人id！');
+    }
+
+    return this.commentService.create(commentInfo);
+
+  }
+
 
   /**
    * 查询匹配条件的用户
