@@ -1,37 +1,62 @@
-import { Body, Request,Controller, Post, HttpCode, HttpStatus, Get, UseGuards, Delete, Param, Patch, Req, Query } from '@nestjs/common';
+import { Body, Request,Controller, Post, HttpCode, HttpStatus, Get, UseGuards, Delete, Param, Patch, Req, Query, Inject } from '@nestjs/common';
 import { PalService } from './pal.service';
 
-import { CreateHitchDto,UpdateHitchDto } from './pal.dto';
+import { CreateNeedDto,UpdateNeedDto } from './dto/need.dto';
 import { AuthGuard } from 'src/auth/auth.guard';
+import { Public } from 'src/common/decorators/public.decorator';
+import { generateParseIntPipe, generateSkip } from 'src/common/utils';
 @Controller('pal')
 export class PalController {
-  constructor(private palService: PalService) {}
+  
+  @Inject()
+  private readonly palService: PalService
 
-  // @UseGuards(AuthGuard)
-  @Post()
-  create(@Body() pal: CreateHitchDto ) {
-    return this.palService.create(pal);
+   /**
+   * @name 新建搭子需求
+   * @Body createNeedDto CreateNeedDto
+   */
+  @Post('need')
+  async createNeed(@Body() createNeedDto: CreateNeedDto ) {
+    return this.palService.create(createNeedDto);
   }
 
-/**
-   * 查询匹配条件的用户
-   * @query filter 查询条件
-   * @returns 满足条件的用户列表
+  /**
+   * @name 查询匹配条件的搭子需求
+   * @query page 第几页
+   * @query pageSize 多少条
+   * @query time 时间筛选
+   * @query keyword 关键词筛选
+   * @query location 位置筛选
+   * @returns 满足条件的需求列表
    */
-@Get('/hitches')
-async getAllHitches(@Query('filter') filter: string) {
-  const f = JSON.parse(filter)
-  const r = await this.palService.find(f)
-  return r;
-}
+  @Public()
+  @Get('needList')
+  async getNeedList(
+    @Query('page', generateParseIntPipe('page')) page: number,
+    @Query('pageSize', generateParseIntPipe('pageSize')) pageSize: number,
+    @Query('time') time: string,
+    @Query('location') location: string,
+    @Query('keyword') keyword: string,
+  ) {
+    const query = {
+      keyword,
+      location,
+      time
+    }
+    const skip = generateSkip(page,pageSize)
+    const r = await this.palService.find(skip,pageSize,query);
+    return r;
+  }
+
+
 
 /**
  * 获取搭子需求详情
  * @param id 搭子需求id
  * @returns 用户详情对象
  */ 
-@Get(':id')
-async findOneById(@Param('id') id: string) {
+@Get('need/:id')
+async getNeed(@Param('id') id: string) {
   return await this.palService.findOneById(id);
 } 
 
@@ -41,12 +66,10 @@ async findOneById(@Param('id') id: string) {
    * @body 搭子需求信息
    * @returns 修改后的搭子需求信息
    */
-  // @UseGuards(AuthGuard)
-  @Patch()
-  async update(@Body() hitch: UpdateHitchDto) {
-    console.log(hitch);
+  @Patch('need')
+  async updateNeed(@Body() need: UpdateNeedDto) {
     
-    const r = await this.palService.update(hitch);
+    const r = await this.palService.update(need);
     if(!r) throw new Error()
     return r 
   }
@@ -56,9 +79,9 @@ async findOneById(@Param('id') id: string) {
    * @param id 搭子需求id
    * @returns 删除成功与否
    */
-  // @UseGuards(AuthGuard)
-  @Delete(':id')
-  async remove(@Param('id') id: string) {
+
+  @Delete('need/:id')
+  async deleteNeed(@Param('id') id: string) {
     const r = await this.palService.delete(id);
     return r
   }

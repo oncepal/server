@@ -6,12 +6,13 @@ import mongoose, { HydratedDocument } from 'mongoose';
  * @param sex 性别 0女性 1男性 2都可以
  */
 export type PalLimits = {number:number,minAge:number,sex:number}
-export type HitchDocument = HydratedDocument<Hitch>;
+export type NeedDocument = HydratedDocument<Need>;
 
 @Schema({ timestamps: true })
 /**
  * 搭子需求模型
  * @param time 时间 2023-11-30 hh:mm
+ * @param keyword 关键词
  * @param location 地点 “大坪”
  * @param description 具体描述介绍 “有没有....”
  * @param images 图片 
@@ -21,15 +22,17 @@ export type HitchDocument = HydratedDocument<Hitch>;
  * @param paymentMethod 支付方式 0-无需费用 1-承担自己费用
  */
 @Schema({ timestamps: true ,toJSON: {
-    transform: (doc: HitchDocument, ret) => {
+    transform: (doc: NeedDocument, ret) => {
         delete ret.__v;
         ret.id = ret._id;
         delete ret._id;
     }
 } })
-export class Hitch {
+export class Need {
     @Prop()
     id: string;
+    @Prop({required:true,type:mongoose.Schema.Types.String})
+    keywords:string
     @Prop()
     time: string;
     @Prop()
@@ -48,4 +51,4 @@ export class Hitch {
     paymentMethod:number
 }
 
-export const HitchSchema = SchemaFactory.createForClass(Hitch);
+export const NeedSchema = SchemaFactory.createForClass(Need);

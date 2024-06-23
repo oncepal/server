@@ -1,38 +1,55 @@
-import { Hitch, HitchDocument } from './pal.schema';
+import { Need, NeedDocument } from './schemas/need.schema';
 import { InjectModel } from '@nestjs/mongoose';
 import { Injectable } from '@nestjs/common';
 import { Model } from 'mongoose';
-import { CreateHitchDto,UpdateHitchDto } from './pal.dto';
+import { CreateNeedDto, UpdateNeedDto } from './dto/need.dto';
 @Injectable()
 export class PalService {
-    constructor(@InjectModel(Hitch.name) private model: Model<Hitch>) {}
+  @InjectModel(Need.name)
+  private needModel: Model<Need>;
 
-  async create(pal: Partial<CreateHitchDto>) {
-
-    return await this.model.create(pal);
+  async create(need: Partial<CreateNeedDto>) {
+    return await this.needModel.create(need);
   }
-   async find(pal?:{}) {
-    const pals = await this.model.find(pal).exec();
-    
-    return pals;
-   
-  } 
+
+  async find(skip: number, limit: number, query?: Partial<Need>) {
+    console.log(query);
+
+    const findQuery = this.needModel
+      .find({
+        $or: [{ keywords: { $regex: new RegExp(query?.keywords, 'i') } }],
+      })
+      .sort({ id: 1 })
+      .skip(skip)
+      .limit(limit);
+
+    const needList = await findQuery;
+    const total = await this.needModel.count();
+    return { needList, total };
+  }
+
   async findOneById(id: string) {
-    return await this.model.findById(id).exec();
+    return await this.needModel.findById(id).exec();
   }
   async findOneByPhoneNumber(phoneNumber: string) {
-    return await  this.model.findOne({phoneNumber}).exec();
+    return await this.needModel.findOne({ phoneNumber }).exec();
   }
-  async findOne(pal:Record<string,any>) {
-    return await  this.model.findOne(pal).exec();
+  async findOne(need: Record<string, any>) {
+    return await this.needModel.findOne(need).exec();
   }
-  async update( pal: UpdateHitchDto) {
-    return await this.model.findByIdAndUpdate(pal.id, pal, { new: true }).exec();
+  async update(need: UpdateNeedDto) {
+    return await this.needModel
+      .findByIdAndUpdate(need.id, need, { new: true })
+      .exec();
   }
   async delete(id: string) {
-    return await this.model.findByIdAndRemove(id).exec();
+    const deletedNeed =  await this.needModel.findByIdAndRemove(id)
+    console.log(deletedNeed);
+    
+    return {}
+
   }
   async deleteAll() {
-    return await this.model.deleteMany();
+    return await this.needModel.deleteMany();
   }
 }

@@ -17,23 +17,19 @@ import {
   Res,
 } from '@nestjs/common';
 import { UserService } from './user.service';
-import { CommentService } from './comment.service';
-
-import { CreateUserDto, UpdateUserDto } from './user.dto';
-import { CreateCommentDto, UpdateCommentDto } from './comment.dto';
+import { CreateUserDto, UpdateUserDto } from './dto/user.dto';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { Response } from 'express';
-import { error } from 'src/common/utils';
+import { error,generateParseIntPipe, generateSkip } from 'src/common/utils';
 @Controller('user')
 export class UserController {
-  constructor(private readonly userService: UserService, private readonly commentService: CommentService) { }
+  constructor(private readonly userService: UserService) { }
 
   /**
    * 创建用户
    * @body userInfo 用户信息
    * @returns 创建好的用户信息
    */
-  // @UseGuards(AuthGuard)
   @Post()
   @Header('content-type', 'application/json')
   async createUser(@Body() userInfo: CreateUserDto, @Res() res: Response) {
@@ -52,26 +48,6 @@ export class UserController {
   }
 
 
-  /**
-   * 新增用户评论
-   * @body commentInfo 评论信息
-   * @returns 创建好的评论信息
-   */
-  // @UseGuards(AuthGuard)
-  @Post('/comment')
-  @Header('content-type', 'application/json')
-  async createComment(@Body() commentInfo: CreateCommentDto, @Res() res: Response) {
-    if (!commentInfo?.commentatorId) {
-      return error(res, 500, '缺少评论人id！');
-    }
-    if (!commentInfo?.commentedUserId) {
-      return error(res, 500, '缺少被评论人id！');
-    }
-
-    return this.commentService.create(commentInfo);
-
-  }
-
 
   /**
    * 查询匹配条件的用户
@@ -79,9 +55,18 @@ export class UserController {
    * @returns 满足条件的用户列表
    */
   @Get()
-  async findAll(@Query('filter') filter: string) {
-    const f = JSON.parse(filter);
-    const r = await this.userService.find(f);
+  async findAll(
+    @Query('page', generateParseIntPipe('page')) page: number,
+    @Query('pageSize', generateParseIntPipe('pageSize')) pageSize: number,
+    @Query('phoneNumber') phoneNumber: string,
+    @Query('name') name: string,
+  ) {
+    const query = {
+      phoneNumber,
+      name
+    }
+    const skip = generateSkip(page,pageSize)
+    const r = await this.userService.find(skip,pageSize,query);
     return r;
   }
 
@@ -100,7 +85,6 @@ export class UserController {
    * @body 用户信息
    * @returns 修改后的用户信息
    */
-  // @UseGuards(AuthGuard)
   @Patch()
   async update(@Body() user: UpdateUserDto) {
 
@@ -114,7 +98,6 @@ export class UserController {
    * @param id 用户id
    * @returns 删除成功与否
    */
-  // @UseGuards(AuthGuard)
   @Delete(':id')
   async remove(@Param('id') id: string) {
     const r = await this.userService.delete(id);

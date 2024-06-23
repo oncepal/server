@@ -1,46 +1,63 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  Injectable,
+  UnauthorizedException,
+  Logger,
+  Inject,
+} from '@nestjs/common';
 import { UserService } from '../user/user.service';
 import { JwtService } from '@nestjs/jwt';
-import { SignInDto,RegisterDto, WXSignInDto } from './auth.dto';
+import { LogInDto, RegisterDto } from './dto/auth.dto';
+import { User } from 'src/user/schemas/user.schema';
 
 @Injectable()
 export class AuthService {
-  constructor(
-    private usersService: UserService,
-    private jwtService: JwtService
-  ) {}
+  @Inject()
+  private userService: UserService;
+  @Inject()
+  private jwtService: JwtService;
 
-  
-  async wxSignIn(wxSignInDto: WXSignInDto) {
-    const user = await this.usersService.findOne(wxSignInDto);
-    if (!user) {
-      throw new UnauthorizedException("未查询到该用户");
+  private logger = new Logger();
+
+  async logIn(logInDto: LogInDto) {
+    const userInfo = await this.userService.findOne(logInDto);
+    if (!userInfo) {
+      throw new UnauthorizedException('未查询到该用户');
     }
-    const payload = { sub: user.id, username: user.name };
-    return {
-      user,
-      token: await this.jwtService.signAsync(payload),
-    };
+    if (!userInfo) {
+      await this.register(logInDto);
+    }
+    return this.generateAuthInfo(userInfo);
   }
 
-  async signIn(signInDto: SignInDto) {
-    const user = await this.usersService.findOne(signInDto);
-    if (!user) {
-      throw new UnauthorizedException("未查询到该用户");
+  async register(registerDto: RegisterDto) {
+    const createdUser = await this.userService.create(registerDto);
+    if (!createdUser) {
+      throw new UnauthorizedException('注册失败！');
     }
-    const payload = { sub: user.id, username: user.name };
-    return {
-      user,
-      token: await this.jwtService.signAsync(payload),
-    };
+    return this.generateAuthInfo(createdUser);
   }
 
-  async register(registerDto:RegisterDto) {
-    const user = await this.usersService.create(registerDto);
-    const payload = { sub: user.id, username: user.name };
-    return {
-      user,
-      token: await this.jwtService.signAsync(payload),
+  async refresh(refreshToken: string) {
+    const data = this.jwtService.verify(refreshToken);
+    const userInfo = await this.userService.findOneById(data.userId);
+    if (!userInfo) throw new UnauthorizedException('token 已失效，请重新登录');
+    return this.generateAuthInfo(userInfo, false);
+  }
+  async generateAuthInfo(userInfo: User, isIncludingUserInfo: Boolean = true) {
+    const tokens = {
+      accessToken: await this.generateJwtTokens(userInfo),
+      refreshToken: await this.generateJwtTokens(userInfo, true),
     };
+    return {
+      ...tokens,
+      ...(isIncludingUserInfo ? { userInfo } : {}),
+    };
+  }
+  async generateJwtTokens(userInfo: User, isRefresh: Boolean = false) {
+    let payload;
+    if (isRefresh) payload = { userId: userInfo.id };
+    else payload = { userId: userInfo.id, username: userInfo.name };
+
+    return this.jwtService.signAsync(payload);
   }
 }

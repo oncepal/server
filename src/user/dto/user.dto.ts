@@ -1,5 +1,4 @@
-import { IsString, IsNumber, IsNotEmpty } from 'class-validator';
-import { User } from './user.schema'
+import { IsString, IsNumber, IsNotEmpty, IsBoolean } from 'class-validator';
 import { OmitType, PartialType, IntersectionType } from '@nestjs/mapped-types'
 export class CreateUserDto {
     @IsString()
@@ -18,6 +17,8 @@ export class CreateUserDto {
     birthday: string;
     @IsNumber()
     sex: number;
+    @IsBoolean()
+    isFrozen:boolean
     @IsString()
     introduction: string;
 }
