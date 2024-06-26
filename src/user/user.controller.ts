@@ -55,7 +55,7 @@ export class UserController {
    * @returns 满足条件的用户列表
    */
   @Get()
-  async findAll(
+  async getUsers(
     @Query('page', generateParseIntPipe('page')) page: number,
     @Query('pageSize', generateParseIntPipe('pageSize')) pageSize: number,
     @Query('phoneNumber') phoneNumber: string,
@@ -76,7 +76,7 @@ export class UserController {
    * @returns 用户详情对象
    */
   @Get(':id')
-  async findOneById(@Param('id') id: string) {
+  async getUserById(@Param('id') id: string) {
     return await this.userService.findOneById(id);
   }
 
@@ -86,7 +86,7 @@ export class UserController {
    * @returns 修改后的用户信息
    */
   @Patch()
-  async update(@Body() user: UpdateUserDto) {
+  async updateUser(@Body() user: UpdateUserDto) {
 
     const r = await this.userService.update(user);
     if (!r) throw new Error();
@@ -99,7 +99,7 @@ export class UserController {
    * @returns 删除成功与否
    */
   @Delete(':id')
-  async remove(@Param('id') id: string) {
+  async deleteUser(@Param('id') id: string) {
     const r = await this.userService.delete(id);
     return r;
   }
