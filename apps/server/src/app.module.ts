@@ -8,8 +8,21 @@ import { AuthModule } from './auth/auth.module';
 import { PalModule } from './pal/pal.module';
 import { RoleModule } from './role/role.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { ClientsModule, Transport } from '@nestjs/microservices';
+import { PrismaModule } from './prisma/prisma.module';
 @Module({
-  imports: [ PalModule,UserModule, AuthModule, RoleModule,
+  imports: [ PalModule,
+    
+    ClientsModule.register([
+      {
+        name: 'USER_SERVICE',
+        transport: Transport.TCP,
+        options: {
+          port: 8888,
+        },
+      },
+    ])
+    , AuthModule, RoleModule,
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: 'src/.env'
@@ -21,6 +34,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
       }),
       inject: [ConfigService],
     }),
+    PrismaModule,
    ],
   controllers: [AppController],
   providers: [AppService],
