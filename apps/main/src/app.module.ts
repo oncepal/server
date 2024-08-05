@@ -9,23 +9,25 @@ import { PalModule } from './pal/pal.module';
 import { RoleModule } from './role/role.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ClientsModule, Transport } from '@nestjs/microservices';
-import { PrismaModule } from './prisma/prisma.module';
+
 @Module({
-  imports: [ PalModule,
-    
+  imports: [
+    // PalModule,
+    // UserModule,
     ClientsModule.register([
       {
         name: 'USER_SERVICE',
         transport: Transport.TCP,
         options: {
-          port: 8888,
+          port: 19961,
         },
       },
-    ])
-    , AuthModule, RoleModule,
+    ]),
+    AuthModule,
+    RoleModule,
     ConfigModule.forRoot({
       isGlobal: true,
-      envFilePath: 'src/.env'
+      envFilePath: '.env', 
     }),
     MongooseModule.forRootAsync({
       imports: [ConfigModule],
@@ -34,17 +36,13 @@ import { PrismaModule } from './prisma/prisma.module';
       }),
       inject: [ConfigService],
     }),
-    PrismaModule,
-   ],
+  ],
   controllers: [AppController],
   providers: [AppService],
-  
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     //全局日志监听
-    consumer
-      .apply(CustomMiddleware)
-      .forRoutes('user','pal','auth');
+    consumer.apply(CustomMiddleware).forRoutes('user', 'pal', 'auth');
   }
 }

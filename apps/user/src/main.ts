@@ -7,7 +7,7 @@ async function bootstrap() {
     {
       transport: Transport.TCP,
       options: {
-        port: 8888,
+        port: 19961,
       },
     },
   );

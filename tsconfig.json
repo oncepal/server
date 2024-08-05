@@ -17,6 +17,19 @@
     "strictBindCallApply": false,
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false,
-    "paths": {}
+    "paths": {
+      "@libs/prisma": [
+        "libs/prisma/src"
+      ],
+      "@libs/prisma/*": [
+        "libs/prisma/src/*"
+      ],
+      "@libs/utils": [
+        "libs/utils/src"
+      ],
+      "@libs/utils/*": [
+        "libs/utils/src/*"
+      ]
+    }
   }
 }
