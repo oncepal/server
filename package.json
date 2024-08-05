@@ -13,7 +13,7 @@
     "dev:main": "nest start --watch",
     "db:pull": "prisma db pull",
     "db:push": "prisma db push", 
-    "db:generate": "prisma db generate",
+    "db:gen": "prisma generate",
     "db:init":"npx @snaplet/seed init prisma/seed",
     "db:seed":"prisma db seed",
     "debug:user": "nest start --debug --watch user",
