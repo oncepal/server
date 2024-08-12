@@ -9,13 +9,12 @@
     "build": "nest build",
     "format": "prettier --write \"apps/**/*.ts\" \"libs/**/*.ts\"",
     "start": "nest start",
-    "dev:user": "nest start --watch user",
-    "dev:main": "nest start --watch",
+    "dev": "nest start --watch",
     "db:pull": "prisma db pull",
-    "db:push": "prisma db push", 
+    "db:push": "prisma db push",
     "db:gen": "prisma generate",
-    "db:init":"npx @snaplet/seed init prisma/seed",
-    "db:seed":"prisma db seed",
+    "db:init": "npx @snaplet/seed init prisma/seed",
+    "db:seed": "prisma db seed",
     "debug:user": "nest start --debug --watch user",
     "debug:main": "nest start --debug --watch",
     "start:prod": "node dist/apps/main/main",
@@ -35,9 +34,12 @@
     "@nestjs/microservices": "^10.3.10",
     "@nestjs/mongoose": "^10.0.1",
     "@nestjs/platform-express": "^10.0.0",
+    "@nestjs/throttler": "^6.1.0",
     "@prisma/client": "^5.17.0",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.0",
+    "helmet": "^7.1.0",
+    "ioredis": "^5.4.1",
     "mongoose": "^7.6.3",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.8.1"
@@ -91,7 +93,6 @@
       "^@libs/utils(|/.*)$": "<rootDir>/libs/utils/src/$1"
     }
   },
-
   "prisma": {
     "seed": "tsx prisma/seed/seed.ts"
   }
