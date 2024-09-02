@@ -17,9 +17,9 @@ import {
 import { PalService } from './pal.service';
 
 import { CreateNeedDto, UpdateNeedDto } from './dto/need.dto';
-import { AuthGuard } from '../auth/auth.guard';
-import { Public } from '../common/decorators/public.decorator';
-import {  UtilsService } from '@libs/utils';
+import { AuthGuard } from '@libs/guards';
+import { Public } from '@libs/decorators';
+import { generateParseIntPipe, generateSkip } from '@libs/utils';
 import { UserService } from '../user/user.service';
 @Controller('pal')
 export class PalController {
@@ -68,8 +68,8 @@ export class PalController {
   @Public()
   @Get('needs')
   async getNeeds(
-    @Query('page', UtilsService.generateParseIntPipe('page')) page: number,
-    @Query('pageSize', UtilsService.generateParseIntPipe('pageSize')) pageSize: number,
+    @Query('page',  generateParseIntPipe('page')) page: number,
+    @Query('pageSize',  generateParseIntPipe('pageSize')) pageSize: number,
     @Query('time') time: string,
     @Query('location') location: string,
     @Query('keyword') keyword: string,
@@ -80,7 +80,7 @@ export class PalController {
       location,
       time,
     };
-    const skip = UtilsService.generateSkip(page, pageSize);
+    const skip =  generateSkip(page, pageSize);
     const r = await this.palService.find(skip, pageSize, query);
     return r;
   }

@@ -1,9 +1,9 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { ResponseInterceptor } from './common/interceptors/response.interceptor';
-import { InvokeRecordInterceptor } from './common/interceptors/invokeRecord.Interceptor';
+import { ResponseInterceptor } from '@libs/interceptors';
+import { InvokeRecordInterceptor } from '@libs/interceptors';
 import helmet from 'helmet';
-import { HttpExceptionFilter } from './common/filters/httpException.filter';
+import { HttpExceptionFilter } from '@libs/filters';
 import { ValidationPipe } from '@nestjs/common';
 import { MicroserviceOptions, Transport } from '@nestjs/microservices';
 async function starter() {

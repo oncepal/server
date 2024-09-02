@@ -2,7 +2,7 @@ import { Body, Controller, Get, Inject, Post, Query } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
 import { Prisma } from '@prisma/client';
 import { AppService } from './app.service';
-import { Public } from './common/decorators/public.decorator';
+import { Public } from '@libs/decorators';
 
 @Controller()
 export class AppController {

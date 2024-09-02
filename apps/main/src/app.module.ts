@@ -3,10 +3,9 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { UserModule } from './user/user.module';
-import { CustomMiddleware } from './common/middlewares/custom.middleware';
+import { CustomMiddleware } from '@libs/middlewares';
 import { AuthModule } from './auth/auth.module';
 import { PalModule } from './pal/pal.module';
-import { RoleModule } from './role/role.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { ThrottlerModule } from '@nestjs/throttler';
@@ -33,7 +32,6 @@ import { ThrottlerModule } from '@nestjs/throttler';
       },
     ]),
     AuthModule,
-    RoleModule,
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: '.env', 

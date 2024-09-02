@@ -18,9 +18,8 @@ import {
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto, UpdateUserDto } from './dto/user.dto';
-import { AuthGuard } from '../auth/auth.guard';
 import { Response } from 'express';
-import { UtilsService } from '@libs/utils';
+import { error, generateParseIntPipe, generateSkip } from '@libs/utils';
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) { }
@@ -42,9 +41,9 @@ export class UserController {
         const res = this.userService.create(userInfo);
         return res;
       } else {
-        return UtilsService.error(res, 500, '已存在该用户！');
+        return  error(res, 500, '已存在该用户！');
       }
-    } else return UtilsService.error(res, 500, '缺少手机号！');
+    } else return  error(res, 500, '缺少手机号！');
   }
 
 
@@ -56,8 +55,8 @@ export class UserController {
    */
   @Get()
   async getUsers(
-    @Query('page', UtilsService.generateParseIntPipe('page')) page: number,
-    @Query('pageSize', UtilsService.generateParseIntPipe('pageSize')) pageSize: number,
+    @Query('page', generateParseIntPipe('page')) page: number,
+    @Query('pageSize', generateParseIntPipe('pageSize')) pageSize: number,
     @Query('phoneNumber') phoneNumber: string,
     @Query('name') name: string,
   ) {
@@ -65,7 +64,7 @@ export class UserController {
       phoneNumber,
       name
     }
-    const skip = UtilsService.generateSkip(page,pageSize)
+    const skip = generateSkip(page,pageSize)
     const r = await this.userService.find(skip,pageSize,query);
     return r;
   }

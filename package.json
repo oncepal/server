@@ -13,7 +13,7 @@
     "db:pull": "npx prisma db pull",
     "db:push": "npx prisma db push",
     "db:generate": "npx prisma generate",
-    "docker":"docker-compose up -d",
+    "docker": "docker-compose up -d",
     "debug:user": "nest start --debug --watch user",
     "debug:main": "nest start --debug --watch",
     "start:prod": "node dist/apps/main/main",
@@ -34,7 +34,7 @@
     "@nestjs/mongoose": "^10.0.1",
     "@nestjs/platform-express": "^10.0.0",
     "@nestjs/throttler": "^6.1.0",
-    "@prisma/client": "^5.17.0",
+    "@prisma/client": "^5.19.0",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.0",
     "helmet": "^7.1.0",
@@ -89,7 +89,14 @@
     ],
     "moduleNameMapper": {
       "^@libs/prisma(|/.*)$": "<rootDir>/libs/prisma/src/$1",
-      "^@libs/utils(|/.*)$": "<rootDir>/libs/utils/src/$1"
+      "^@libs/utils(|/.*)$": "<rootDir>/libs/utils/src/$1",
+      "^@libs/decorators(|/.*)$": "<rootDir>/libs/decorators/src/$1",
+      "^@libs/filters(|/.*)$": "<rootDir>/libs/filters/src/$1",
+      "^@libs/interceptors(|/.*)$": "<rootDir>/libs/interceptors/src/$1",
+      "^@libs/middlewares(|/.*)$": "<rootDir>/libs/middlewares/src/$1",
+            "^@libs/constants(|/.*)$": "<rootDir>/libs/constants/src/$1",
+            "^@libs/guards(|/.*)$": "<rootDir>/libs/guards/src/$1",
+            "^@libs/configs(|/.*)$": "<rootDir>/libs/configs/src/$1"
     }
   },
   "engines": {
