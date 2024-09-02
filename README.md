@@ -1,43 +1,49 @@
-# General
-This is starter of a Nest.js 10 application with a MongoDB replica set + Prisma ODM.
+# 概述
 
-# Features
-- JWT Authentication
-- CASL Integration
-- Simple query builder
-- Data Pagination
-- Data Sorting
-- Data Filtering
-- Exception Filters
-- Validation Pipes
-- Swagger Documentation
-- Docker Compose
-- MongoDB Replica Set
-- Serializers
-- Health Check
-- SWC (Speedy Web Compiler)
+ONCEPAL后端Monorepos(Nest.js + MongoDB replica set + Prisma ODM).
 
-# Providers implemented
-- Prisma
-- Tencent Cloud
+# 功能
+- JWT 登录鉴权
+- CASL 权限控制集成
+- Data 分页排序过滤
+- Exception Filters 异常过滤
+- Validation Pipes 参数管道控制
+- Docker Compose 部署集成
+- MongoDB Replica Set 副本集
+- Serializers 序列化
+- Helmet 头保护
+- Throttler 限流
+- CORS 跨域支持
 
-# Requirements
+# 环境要求
 - Nest.js 10
+```js
+npm i -g @nestjs/cli
+```
 - Docker
 - Docker Compose
-- MongoDB
-- Node.js
+- Node.js 20
 - NPM
+- PNPM 
+```js
+npm i -g pnpm
+```
 
-# Development
+# 开发
 
-## MongoDB Replica Set
-1. Create volume for each MongoDB node
+> ####如果很慢，记得在配置docker镜像源
+>  "registry-mirrors": [
+>    "https://dockerproxy.com",
+>    "https://docker.m.daocloud.io"
+>  ]
+
+## MongoDB Replica Set 副本集
+<!-- 1. Create volume for each MongoDB node
 ```bash
 docker volume create --name mongodb_repl_data1 -d local
 docker volume create --name mongodb_repl_data2 -d local
 docker volume create --name mongodb_repl_data3 -d local
-```
+``` -->
 
 2. Start the Docker containers using docker-compose
 ```bash
@@ -66,32 +72,21 @@ sudo nano /etc/hosts
 mongosh "mongodb://localhost:30000,localhost:30001,localhost:30002/?replicaSet=rs0"
 ```
 
-## Migration
 
-1. Run migrations
-
-```bash
-npm run db:migrate:up
-```
-> Need to apply migration `token-ttl-indexes` to database
-This migration create TTL indexes for `refreshToken` and `accessToken` fields in `TokenWhiteList` model.
-Token will automatically deleted from database when token expriration date will come.
-
-
-## Start
-1. Install dependencies
+## Nest
+1. 安装依赖
 
 ```
-npm install
+pnpm install
 ```
 
-2. Generate Prisma Types
+2. 生成 Prisma 客户端类型
     
 ```
 npm run db:generate
 ```
 
-3. Push MongoDB Schema 
+3. 推送 MongoDB Schema 
 
 ```
 npm run db:push
@@ -103,81 +98,6 @@ npm run db:push
 ```
 npm run start:dev
 ```
-
-## SWC
-By default [SWC](https://swc.rs/) is used for TypeScript compilation, but it can be changed. To use `tsc` as project builder, change Nest CLI config:
-
-```json
-// nest-cli.json
-
-{
-  ...,
-  "compilerOptions": {
-    ...,
-    "builder": "tsc" // type "swc" to return back to SWC
-  }
-}
-```
-
-And change Jest config for tests:
-```json
-// jest-e2e.json
-
-{
-  ...,
-  "transform": {
-    "^.+\\.(t|j)s?$": ["ts-jest"] // replace with "@swc/jest" to return back to SWC
-  },
-}
-```
-
-## Pagination
-Pagination is available for all endpoints that return an array of objects. The default page size is 10. You can change the default page size by setting the `DEFAULT_PAGE_SIZE` environment variable.
-We are using the [nestjs-prisma-pagination](https://www.npmjs.com/package/@nodeteam/nestjs-prisma-pagination) library for pagination.
-
-Example of a paginated response:
-
-```typescript
-{
-    data: T[],
-    meta: {
-        total: number,
-        lastPage: number,
-        currentPage: number,
-        perPage: number,
-        prev: number | null,
-        next: number | null,
-  },
-}
-```
-
-## Query Builder
-The query builder is available for all endpoints that return an array of objects. You can use the query builder to filter, sort, and paginate the results.
-We are using the [nestjs-pipes](https://www.npmjs.com/package/@nodeteam/nestjs-pipes) library for the query builder.
-
-Example of a query builder request:
-
-```
-GET /user/?where=firstName:John
-```
-
-```typescript
-    @Get()
-    @ApiQuery({ name: 'where', required: false, type: 'string' })
-    @ApiQuery({ name: 'orderBy', required: false, type: 'string' })
-    @UseGuards(AccessGuard)
-    @Serialize(UserBaseEntity)
-    @UseAbility(Actions.read, TokensEntity)
-    findAll(
-        @Query('where', WherePipe) where?: Prisma.UserWhereInput,
-        @Query('orderBy', OrderByPipe) orderBy?: Prisma.UserOrderByWithRelationInput,
-    ): Promise<PaginatorTypes.PaginatedResult<User>> {
-        return this.userService.findAll(where, orderBy);
-    }
-```
-
-## Swagger
-Swagger documentation is available at http://localhost:3000/docs
 
 ## JWT
 
@@ -224,73 +144,6 @@ export enum Roles {
 }
 ```
 
-## Permissions definition
-
-`nest-casl` comes with a set of default actions, aligned with [Nestjs Query](https://doug-martin.github.io/nestjs-query/docs/graphql/authorization).
-`manage` has a special meaning of any action.
-DefaultActions aliased to `Actions` for convenicence.
-
-```typescript
-export enum DefaultActions {
-  read = 'read',
-  aggregate = 'aggregate',
-  create = 'create',
-  update = 'update',
-  delete = 'delete',
-  manage = 'manage',
-}
-```
-
-In case you need custom actions either [extend DefaultActions](#custom-actions) or just copy and update, if extending typescript enum looks too tricky.
-
-Permissions defined per module. `everyone` permissions applied to every user, it has `every` alias for `every({ user, can })` be more readable. Roles can be extended with previously defined roles.
-
-```typescript
-// post.permissions.ts
-
-import { Permissions, Actions } from 'nest-casl';
-import { InferSubjects } from '@casl/ability';
-
-import { Roles } from '../app.roles';
-import { Post } from './dtos/post.dto';
-import { Comment } from './dtos/comment.dto';
-
-export type Subjects = InferSubjects<typeof Post, typeof Comment>;
-
-export const permissions: Permissions<Roles, Subjects, Actions> = {
-  everyone({ can }) {
-    can(Actions.read, Post);
-    can(Actions.create, Post);
-  },
-
-  customer({ user, can }) {
-    can(Actions.update, Post, { userId: user.id });
-  },
-
-  operator({ can, cannot, extend }) {
-    extend(Roles.customer);
-
-    can(Actions.manage, PostCategory);
-    can(Actions.manage, Post);
-    cannot(Actions.delete, Post);
-  },
-};
-```
-
-```typescript
-// post.module.ts
-
-import { Module } from '@nestjs/common';
-import { CaslModule } from 'nest-cast';
-
-import { permissions } from './post.permissions';
-
-@Module({
-  imports: [CaslModule.forFeature({ permissions })],
-})
-export class PostModule {}
-```
-
 ## CaslUser decorator
 CaslUser decorator provides access to lazy loaded user, obtained from request or user hook and cached on request object.
 
@@ -303,151 +156,6 @@ CaslUser decorator provides access to lazy loaded user, obtained from request or
     ) {
     const user = await userProxy.get();
     }
-```
-
-## User Hook
-
-Sometimes permission conditions require more info on user than exists on `request.user` User hook called after `getUserFromRequest` only for abilities with conditions. Similar to subject hook, it can be class or tuple.
-Despite UserHook is configured on application level, it is executed in context of modules under authorization. To avoid importing user service to each module, consider making user module global.
-
-```typescript
-// user.hook.ts
-
-import { Injectable } from '@nestjs/common';
-
-import { UserBeforeFilterHook } from 'nest-casl';
-import { UserService } from './user.service';
-import { User } from './dtos/user.dto';
-
-@Injectable()
-export class UserHook implements UserBeforeFilterHook<User> {
-  constructor(readonly userService: UserService) {}
-
-  async run(user: User) {
-    return {
-      ...user,
-      ...(await this.userService.findById(user.id)),
-    };
-  }
-}
-```
-
-```typescript
-//app.module.ts
-
-import { Module } from '@nestjs/common';
-import { CaslModule } from 'nest-casl';
-
-@Module({
-  imports: [
-    CaslModule.forRoot({
-      getUserFromRequest: (request) => request.user,
-      getUserHook: UserHook,
-    }),
-  ],
-})
-export class AppModule {}
-```
-
-or with dynamic module initialization
-
-```typescript
-//app.module.ts
-
-import { Module } from '@nestjs/common';
-import { CaslModule } from 'nest-casl';
-
-@Module({
-  imports: [
-    CaslModule.forRootAsync({
-      useFactory: async (service: SomeCoolService) => {
-        const isOk = await service.doSomething();
-
-        return {
-          getUserFromRequest: () => {
-            if (isOk) {
-              return request.user;
-            }
-          },
-        };
-      },
-      inject: [SomeCoolService],
-    }),
-  ],
-})
-export class AppModule {}
-```
-
-or with tuple hook
-
-```typescript
-//app.module.ts
-
-import { Module } from '@nestjs/common';
-import { CaslModule } from 'nest-casl';
-
-@Module({
-  imports: [
-    CaslModule.forRoot({
-      getUserFromRequest: (request) => request.user,
-      getUserHook: [
-        UserService,
-        async (service: UserService, user) => {
-          return service.findById(user.id);
-        },
-      ],
-    }),
-  ],
-})
-export class AppModule {}
-```
-
-### Custom actions
-
-Extending enums is a bit tricky in TypeScript
-There are multiple solutions described in [this issue](https://github.com/microsoft/TypeScript/issues/17592) but this one is the simplest:
-
-```typescript
-enum CustomActions {
-  feature = 'feature',
-}
-
-export type Actions = DefaultActions | CustomActions;
-export const Actions = { ...DefaultActions, ...CustomActions };
-```
-
-### Custom User and Request types
-
-For example, if you have User with numeric id and current user assigned to `request.loggedInUser`
-
-```typescript
-class User implements AuthorizableUser<Roles, number> {
-  id: number;
-  roles: Array<Roles>;
-}
-
-interface CustomAuthorizableRequest {
-  loggedInUser: User;
-}
-
-@Module({
-  imports: [
-    CaslModule.forRoot<Roles, User, CustomAuthorizableRequest>({
-      superuserRole: Roles.admin,
-      getUserFromRequest(request) {
-        return request.loggedInUser;
-      },
-      getUserHook: [
-        UserService,
-        async (service: UserService, user) => {
-          return service.findById(user.id);
-        },
-      ],
-    }),
-    //  ...
-  ],
-})
-export class AppModule {}
 ```
 
 ## Prisma 

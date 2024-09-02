@@ -1,7 +1,40 @@
 services:
+  # oncepal-main:
+  #   container_name: oncepal-main
+  #   depends_on:
+  #     - mongodb
+  #       - redis
+  #   build:
+  #     context: ./apps
+  #     dockerfile: ./Dockerfile
+  #     args:
+  #         - APP=main
+  #   restart: always
+  #   ports:
+
+  #     - 19960:1996
+  #   networks:
+  #     - oncepal-network
+
+  # oncepal-user:
+  #   container_name: oncepal-user
+  #   depends_on:
+  #     - mongodb
+  #       - redis
+  #   build:
+  #     context: ./apps
+  #     dockerfile: ./Dockerfile
+  #     args:
+  #         - APP=user
+  #   restart: always
+  #   ports:
+  #     - 19960:1996
+  #   networks:
+  #     - oncepal-network
+
   redis:
     container_name: redis
-    image: redis:latest
+    image: redis
     restart: always
     ports:
       - "6379:6379"
@@ -9,6 +42,11 @@ services:
       REDIS_PASSWORD: password
       REDIS_PORT : 6379
       REDIS_DATABASES: 16
+    networks:
+      - oncepal-network
+    volumes:
+            - db_volume:/data
+
   mongo:
     container_name: mongodb
     image: mongo
@@ -25,3 +63,15 @@ services:
       MONGO_REPLICA_PORT: 27017
     ports:
       - 27017:27017
+    networks:
+      - oncepal-network
+    volumes:
+            - db_volume:/data
+networks:
+  oncepal-network:
+    name: oncepal-network
+    driver: bridge
+
+volumes:
+   db_volume:
+        name: "db_volume"

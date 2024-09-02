@@ -10,9 +10,9 @@
     "format": "prettier --write \"apps/**/*.ts\" \"libs/**/*.ts\"",
     "start": "nest start",
     "dev": "nest start --watch",
-    "prisma:pull": "prisma db pull",
-    "prisma:push": "prisma db push",
-    "prisma": "prisma generate",
+    "db:pull": "npx prisma db pull",
+    "db:push": "npx prisma db push",
+    "db:generate": "npx prisma generate",
     "docker":"docker-compose up -d",
     "debug:user": "nest start --debug --watch user",
     "debug:main": "nest start --debug --watch",
@@ -91,6 +91,10 @@
       "^@libs/prisma(|/.*)$": "<rootDir>/libs/prisma/src/$1",
       "^@libs/utils(|/.*)$": "<rootDir>/libs/utils/src/$1"
     }
+  },
+  "engines": {
+    "pnpm": "^9.9.0",
+    "node": "^20.17.0"
   },
   "prisma": {
     "seed": "tsx prisma/seed/seed.ts"
