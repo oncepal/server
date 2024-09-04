@@ -45,11 +45,11 @@ docker volume create --name mongodb_repl_data2 -d local
 docker volume create --name mongodb_repl_data3 -d local
 ``` -->
 
-2. Start the Docker containers using docker-compose
+2. 创建启动docker服务
 ```bash
 docker-compose up -d
 ```
-
+<!-- 
 3. Start an interactive MongoDb shell session on the primary node
 ```bash
 docker exec -it mongo0 mongosh --port 30000
@@ -57,20 +57,12 @@ docker exec -it mongo0 mongosh --port 30000
 # in the shell
 config={"_id":"rs0","members":[{"_id":0,"host":"mongo0:30000"},{"_id":1,"host":"mongo1:30001"},{"_id":2,"host":"mongo2:30002"}]}
 rs.initiate(config);
-```
+``` -->
 
-4 Update hosts file
-```bash
-sudo nano /etc/hosts
-
-# write in the file
-127.0.0.1 mongo0 mongo1 mongo2
-```
-
-5. Connect to MongoDB and check the status of the replica set
+<!-- 1. Connect to MongoDB and check the status of the replica set
 ```
 mongosh "mongodb://localhost:30000,localhost:30001,localhost:30002/?replicaSet=rs0"
-```
+``` -->
 
 
 ## Nest

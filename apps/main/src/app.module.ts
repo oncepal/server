@@ -22,14 +22,7 @@ import { ThrottlerModule } from '@nestjs/throttler';
           port: 19961,
         },
       },
-      {
-        name: 'REDIS_SERVICE',
-        transport: Transport.REDIS,
-        options: {
-          host: 'localhost',
-          port: 19962,
-        }
-      },
+      
     ]),
     AuthModule,
     ConfigModule.forRoot({

@@ -12,7 +12,7 @@
     "dev": "nest start --watch",
     "db:pull": "npx prisma db pull",
     "db:push": "npx prisma db push",
-    "db:generate": "npx prisma generate",
+    "db:generate": "prisma generate",
     "docker": "docker-compose up -d",
     "debug:user": "nest start --debug --watch user",
     "debug:main": "nest start --debug --watch",
@@ -94,14 +94,15 @@
       "^@libs/filters(|/.*)$": "<rootDir>/libs/filters/src/$1",
       "^@libs/interceptors(|/.*)$": "<rootDir>/libs/interceptors/src/$1",
       "^@libs/middlewares(|/.*)$": "<rootDir>/libs/middlewares/src/$1",
-            "^@libs/constants(|/.*)$": "<rootDir>/libs/constants/src/$1",
-            "^@libs/guards(|/.*)$": "<rootDir>/libs/guards/src/$1",
-            "^@libs/configs(|/.*)$": "<rootDir>/libs/configs/src/$1"
+      "^@libs/constants(|/.*)$": "<rootDir>/libs/constants/src/$1",
+      "^@libs/guards(|/.*)$": "<rootDir>/libs/guards/src/$1",
+      "^@libs/configs(|/.*)$": "<rootDir>/libs/configs/src/$1",
+      "^@libs/redis(|/.*)$": "<rootDir>/libs/redis/src/$1"
     }
   },
   "engines": {
-    "pnpm": "^9.9.0",
-    "node": "^20.17.0"
+    "pnpm": ">=9.6.0",
+    "node": ">=20.14.0"
   },
   "prisma": {
     "seed": "tsx prisma/seed/seed.ts"

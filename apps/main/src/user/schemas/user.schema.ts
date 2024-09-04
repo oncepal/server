@@ -1,6 +1,5 @@
 import { Prop, raw, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument, SchemaTypes, Types } from 'mongoose';
-import { Role } from '../../role/schemas/role.schema';
 
 /**
  * 用户模型
@@ -39,8 +38,6 @@ export class User {
     introduction: string;
     @Prop()
     isFrozen:boolean
-    @Prop()
-    roles:Role[]
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

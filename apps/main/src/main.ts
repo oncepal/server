@@ -13,15 +13,8 @@ async function starter() {
     options: {
       port: 19961,
     },
-    
   });
-  const microserviceRedis = app.connectMicroservice({
-    transport: Transport.REDIS,
-    options: {
-      host: 'localhost',
-      port: 19962,
-    },
-  });
+
 
  // 全局参数自动过滤
   app.useGlobalPipes(new ValidationPipe({

@@ -1,9 +1,7 @@
 import {  Module } from '@nestjs/common';
 import { Redis } from 'ioredis';
 import { RedisService } from './redis.service';
-import { RedisController } from './redis.controller';
 @Module({
-  controllers: [RedisController],
   providers: [
     RedisService,
     {
@@ -14,6 +12,7 @@ import { RedisController } from './redis.controller';
         return client;
       }
     }
-  ]
+  ],
+  exports: [RedisService],
 })
 export class RedisModule {}

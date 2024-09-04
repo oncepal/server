@@ -5,8 +5,7 @@ services:
   #     - mongodb
   #       - redis
   #   build:
-  #     context: ./apps
-  #     dockerfile: ./Dockerfile
+  #     context: ./docker/nest
   #     args:
   #         - APP=main
   #   restart: always
@@ -22,8 +21,7 @@ services:
   #     - mongodb
   #       - redis
   #   build:
-  #     context: ./apps
-  #     dockerfile: ./Dockerfile
+  #     context: ./docker/nest
   #     args:
   #         - APP=user
   #   restart: always
@@ -51,7 +49,7 @@ services:
     container_name: mongodb
     image: mongo
     build: 
-      context: ./db/mongodb_rs
+      context: ./docker/mongodb
       args:
         MONGO_VERSION: latest
     restart: always
