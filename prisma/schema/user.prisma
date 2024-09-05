@@ -13,3 +13,22 @@ model User {
 
 }
 
+model Follow {
+   id           String   @id @default(auto()) @map("_id") @db.ObjectId
+
+}
+
+model Post {
+   id           String   @id @default(auto()) @map("_id") @db.ObjectId
+
+}
+
+model Comment {
+   id           String   @id @default(auto()) @map("_id") @db.ObjectId
+
+}
+
+model Like {
+   id           String   @id @default(auto()) @map("_id") @db.ObjectId
+
+}
