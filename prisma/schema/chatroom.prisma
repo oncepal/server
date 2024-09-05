@@ -1,6 +1,7 @@
 enum ChatroomType {
-  SINGLE_CHAT
-  MULTIPLE_CHAT
+  SINGLE
+  GROUP
+  MULTIPLE
 }
 model Chatroom {
   id          String   @id @default(auto()) @map("_id") @db.ObjectId
