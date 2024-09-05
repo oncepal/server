@@ -8,13 +8,6 @@ import { ValidationPipe } from '@nestjs/common';
 import { MicroserviceOptions, Transport } from '@nestjs/microservices';
 async function starter() {
   const app = await NestFactory.create(AppModule, { cors: true });
-  const microserviceUser = app.connectMicroservice({
-    transport: Transport.TCP,
-    options: {
-      port: 19961,
-    },
-  });
-
 
  // 全局参数自动过滤
   app.useGlobalPipes(new ValidationPipe({
@@ -26,9 +19,6 @@ async function starter() {
   
   app.useGlobalFilters(new HttpExceptionFilter());  
   app.use(helmet());
-
-  
-  await app.startAllMicroservices();
   await app.listen(1996);
 }
 starter();

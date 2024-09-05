@@ -71,6 +71,15 @@
       "compilerOptions": {
         "tsConfigPath": "libs/redis/tsconfig.lib.json"
       }
+    },
+    "chatroom": {
+      "type": "application",
+      "root": "apps/chatroom",
+      "entryFile": "main",
+      "sourceRoot": "apps/chatroom/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/chatroom/tsconfig.app.json"
+      }
     }
   }
 }

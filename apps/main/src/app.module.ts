@@ -14,16 +14,6 @@ import { ThrottlerModule } from '@nestjs/throttler';
   imports: [
     // PalModule,
     // UserModule,
-    ClientsModule.register([
-      {
-        name: 'USER_SERVICE',
-        transport: Transport.TCP,
-        options: {
-          port: 19961,
-        },
-      },
-      
-    ]),
     AuthModule,
     ConfigModule.forRoot({
       isGlobal: true,
