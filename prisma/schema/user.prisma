@@ -1,34 +1,68 @@
-
-model User {
-  id           String   @id @default(auto()) @map("_id") @db.ObjectId
-  age          Int?
-  avatar       String?
-  birthday     String?
-  height       Int?
-  introduction String?
-  name         String?
-  phoneNumber  String?
-  sex          Int?
-  weight       Int?
-
+enum Role {
+   USER
+   ADMIN
 }
 
-model Follow {
-   id           String   @id @default(auto()) @map("_id") @db.ObjectId
+type Profile {
+   bio          String?
+   sex          Int?
+   weight       Int?
+   age          Int?
+   avatar       String?
+   birthday     String?
+   height       Int?
+   introduction String?
+}
 
+model User {
+   id          String     @id @default(auto()) @map("_id") @db.ObjectId
+   role        Role       @default(USER)
+   posts       Post[]
+   profile     Profile?
+   phoneNumber String
+   comment     Comment[]
+   followers   Follow[]   @relation("follower")
+   followings  Follow[]   @relation("following")
+   Like        Like[]
+   Need        Need[]
+   chatroom    Chatroom[] @relation(fields: [chatroomIds], references: [id])
+   chatroomIds String[]   @db.ObjectId
 }
 
 model Post {
-   id           String   @id @default(auto()) @map("_id") @db.ObjectId
+   id        String    @id @default(auto()) @map("_id") @db.ObjectId
+   content     String
+   published Boolean   @default(false)
+   author    User      @relation(fields: [authorId], references: [id])
+   authorId  String    @unique @db.ObjectId
+   comments  Comment[]
+   Like      Like[]   
+   createdAt DateTime  @default(now())
+   updatedAt DateTime  @default(now())
+}
 
+model Follow {
+   id          String @id @default(auto()) @map("_id") @db.ObjectId
+   following   User   @relation("following", fields: [followingId], references: [id])
+   followingId String @unique @db.ObjectId
+   follower    User   @relation("follower", fields: [followerId], references: [id])
+   followerId  String @unique @db.ObjectId
 }
 
 model Comment {
-   id           String   @id @default(auto()) @map("_id") @db.ObjectId
-
+   id            String  @id @default(auto()) @map("_id") @db.ObjectId
+   title         String
+   content       String
+   commentator   User    @relation(fields: [commentatorId], references: [id])
+   commentatorId String  @unique @db.ObjectId
+   post          Post?   @relation(fields: [postId], references: [id]) // A comment can have one post
+   postId        String? @unique @db.ObjectId
 }
 
 model Like {
-   id           String   @id @default(auto()) @map("_id") @db.ObjectId
-
+   id      String @id @default(auto()) @map("_id") @db.ObjectId
+   liker   User   @relation(fields: [likerId], references: [id])
+   likerId String @db.ObjectId
+   post    Post   @relation(fields: [postId], references: [id])
+   postId  String @db.ObjectId
 }

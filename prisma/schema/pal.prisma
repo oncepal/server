@@ -1,0 +1,29 @@
+type PalLimits {
+  minAge Int?
+  number Int?
+  sex    Int?
+}
+
+type Payment {
+  way    PaymentType
+  number Int?
+}
+
+enum PaymentType {
+  AA
+  NONE
+  FIXED
+}
+
+model Need {
+  id          String     @id @default(auto()) @map("_id") @db.ObjectId
+  needer      User       @relation(fields: [neederId], references: [id])
+  neederId    String     @db.ObjectId
+  description String?
+  images      String[]
+  keywords    String?
+  location    String?
+  limits      PalLimits?
+  payment     Payment?
+  time        String?
+}

@@ -3,12 +3,14 @@ enum ChatroomType {
   GROUP
   MULTIPLE
 }
+
 model Chatroom {
-  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  id          String       @id @default(auto()) @map("_id") @db.ObjectId
   creatorId   String?
   description String?
   type        ChatroomType
   name        String?
-  users       String[]
+  chater      User[]         @relation(fields: [chaterIds], references: [id])
+  chaterIds   String[]     @db.ObjectId 
   history     String[]
 }

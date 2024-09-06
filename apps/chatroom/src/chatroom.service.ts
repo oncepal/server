@@ -33,6 +33,11 @@ export class ChatroomService {
     return '创建成功';
   }
   async join(id: string, userId: string) {
+    const user = await this.prismaService.post.findUnique({
+      where: {
+        id,
+      },
+    });
     const chatroom = await this.prismaService.chatroom.findUnique({
       where: {
         id,
