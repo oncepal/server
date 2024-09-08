@@ -1,11 +1,22 @@
 enum Role {
-  Admin
-  User
+   ADMIN @map("admin")
+   USER  @map("user")
+}
+
+enum Gender {
+   Male   @map("male")
+   Female @map("female")
+}
+
+enum UserStatus {
+   OPEN    @map("open")
+   LOCKED  @map("locked")
+   EXPIRED @map("expired")
 }
 
 type Profile {
    bio          String?
-   sex          Int?
+   gender       Gender?
    weight       Int?
    age          Int?
    avatar       String?
@@ -16,29 +27,35 @@ type Profile {
 
 model User {
    id          String     @id @default(auto()) @map("_id") @db.ObjectId
-   roles        Role[]       @default([User])
-   posts       Post[]
-   profile     Profile?
    phoneNumber String
-   comment     Comment[]
+   profile     Profile?
+   status      UserStatus @default(OPEN)
+   roles       Role[]     @default([USER])
+
+   order       Order[]
+   posts       Post[]
+   comments    Comment[]
    followers   Follow[]   @relation("follower")
-   followings  Follow[]   @relation("following")
-   Like        Like[]
-   Need        Need[]
+   following   Follow[]   @relation("following")
+   likes       Like[]
+   needs       Need[]
    chatroom    Chatroom[] @relation(fields: [chatroomIds], references: [id])
    chatroomIds String[]   @db.ObjectId
+
+   createdAt DateTime @default(now())
+   updatedAt DateTime @default(now()) @updatedAt
 }
 
 model Post {
    id        String    @id @default(auto()) @map("_id") @db.ObjectId
-   content     String
+   content   String
    published Boolean   @default(false)
    author    User      @relation(fields: [authorId], references: [id])
    authorId  String    @unique @db.ObjectId
    comments  Comment[]
-   Like      Like[]   
+   Like      Like[]
    createdAt DateTime  @default(now())
-   updatedAt DateTime  @default(now())
+   updatedAt DateTime  @default(now()) @updatedAt
 }
 
 model Follow {

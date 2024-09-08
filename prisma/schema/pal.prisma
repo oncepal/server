@@ -1,19 +1,19 @@
+
+enum PaymentMethod  {
+  AA
+  NONE
+  FIXED
+}
 type PalLimits {
   minAge Int?
   number Int?
   sex    Int?
 }
-
-type Payment {
-  way    PaymentType
+type NeedPayment {
+  way    PaymentMethod
   number Int?
 }
 
-enum PaymentType {
-  AA
-  NONE
-  FIXED
-}
 
 model Need {
   id          String     @id @default(auto()) @map("_id") @db.ObjectId
@@ -24,6 +24,6 @@ model Need {
   keywords    String?
   location    String?
   limits      PalLimits?
-  payment     Payment?
+  payment     NeedPayment?
   time        String?
 }
