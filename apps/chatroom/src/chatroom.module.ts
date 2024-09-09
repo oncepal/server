@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
 import { ChatroomController } from './chatroom.controller';
 import { ChatroomService } from './chatroom.service';
-import { PrismaModule } from '@libs/prisma';
 import { ChatroomGateway } from './chatroom.gateway';
+import { CommonModule } from '@libs/common';
 @Module({
-  imports: [PrismaModule],
+  imports: [CommonModule],
   controllers: [ChatroomController],
   providers: [ChatroomGateway,ChatroomService],
 })

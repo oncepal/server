@@ -13,10 +13,9 @@ export class AppController {
 
   @Public()
   @Post('createUser')
-  createUser(@Body() user:Prisma.UserCreateInput) {
+  createUser(@Body() user: Prisma.UserCreateInput) {
     return this.userClient.send('createUser', user);
   }
-
 
   @Public()
   @Get()

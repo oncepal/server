@@ -18,28 +18,78 @@
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false,
     "paths": {
-      "@libs/prisma": ["libs/prisma/src"],
-      "@libs/prisma/*": ["libs/prisma/src/*"],
-      "@libs/utils": ["libs/utils/src"],
-      "@libs/utils/*": ["libs/utils/src/*"],
-      "@libs/decorators": ["libs/decorators/src"],
-      "@libs/decorators/*": ["libs/decorators/src/*"],
-      "@libs/filters": ["libs/filters/src"],
-      "@libs/filters/*": ["libs/filters/src/*"],
-      "@libs/interceptors": ["libs/interceptors/src"],
-      "@libs/interceptors/*": ["libs/interceptors/src/*"],
-      "@libs/middlewares": ["libs/middlewares/src"],
-      "@libs/middlewares/*": ["libs/middlewares/src/*"],
-      "@libs/constants": ["libs/constants/src"],
-      "@libs/constants/*": ["libs/constants/src/*"],
-      "@libs/configs": ["libs/configs/src"],
-      "@libs/configs/*": ["libs/configs/src/*"],
-      "@libs/guards": ["libs/guards/src"],
-      "@libs/guards/*": ["libs/guards/src/*"],
-      "@libs/redis": ["libs/redis/src"],
-      "@libs/redis/*": ["libs/redis/src/*"],
-      "@libs/casl": ["libs/casl/src"],
-      "@libs/casl/*": ["libs/casl/src/*"]
+      "@libs/prisma": [
+        "libs/prisma/src"
+      ],
+      "@libs/prisma/*": [
+        "libs/prisma/src/*"
+      ],
+      "@libs/utils": [
+        "libs/utils/src"
+      ],
+      "@libs/utils/*": [
+        "libs/utils/src/*"
+      ],
+      "@libs/decorators": [
+        "libs/decorators/src"
+      ],
+      "@libs/decorators/*": [
+        "libs/decorators/src/*"
+      ],
+      "@libs/filters": [
+        "libs/filters/src"
+      ],
+      "@libs/filters/*": [
+        "libs/filters/src/*"
+      ],
+      "@libs/interceptors": [
+        "libs/interceptors/src"
+      ],
+      "@libs/interceptors/*": [
+        "libs/interceptors/src/*"
+      ],
+      "@libs/middlewares": [
+        "libs/middlewares/src"
+      ],
+      "@libs/middlewares/*": [
+        "libs/middlewares/src/*"
+      ],
+      "@libs/constants": [
+        "libs/constants/src"
+      ],
+      "@libs/constants/*": [
+        "libs/constants/src/*"
+      ],
+      "@libs/configs": [
+        "libs/configs/src"
+      ],
+      "@libs/configs/*": [
+        "libs/configs/src/*"
+      ],
+      "@libs/guards": [
+        "libs/guards/src"
+      ],
+      "@libs/guards/*": [
+        "libs/guards/src/*"
+      ],
+      "@libs/redis": [
+        "libs/redis/src"
+      ],
+      "@libs/redis/*": [
+        "libs/redis/src/*"
+      ],
+      "@libs/casl": [
+        "libs/casl/src"
+      ],
+      "@libs/casl/*": [
+        "libs/casl/src/*"
+      ],
+      "@libs/common": [
+        "libs/common/src"
+      ],
+      "@libs/common/*": [
+        "libs/common/src/*"
+      ]
     }
   }
 }
