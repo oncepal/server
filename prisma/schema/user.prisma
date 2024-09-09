@@ -27,11 +27,11 @@ type Profile {
 
 model User {
    id          String     @id @default(auto()) @map("_id") @db.ObjectId
-   phoneNumber String
+   phoneNumber String @unique
    profile     Profile?
    status      UserStatus @default(OPEN)
    roles       Role[]     @default([USER])
-
+   views       Int        @default(0)
    order       Order[]
    posts       Post[]
    comments    Comment[]
@@ -54,6 +54,7 @@ model Post {
    authorId  String    @unique @db.ObjectId
    comments  Comment[]
    Like      Like[]
+   views     Int       @default(0)
    createdAt DateTime  @default(now())
    updatedAt DateTime  @default(now()) @updatedAt
 }

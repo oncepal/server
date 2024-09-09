@@ -7,7 +7,7 @@ import { ValidationPipe } from '@nestjs/common';
 import { MicroserviceOptions, Transport } from '@nestjs/microservices';
 export const startCommonServer = (
   module: any,port: 1996,
-  options?: {
+  options= {
     
   },
 ) => {

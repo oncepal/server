@@ -24,6 +24,6 @@ import { PrismaModule } from '@libs/prisma';
     }]),
   ],
   providers: [CommonService],
-  exports: [CommonService],
+  exports: [CommonService,PrismaModule],
 })
 export class CommonModule {}
