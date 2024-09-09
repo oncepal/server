@@ -7,7 +7,7 @@ import {
 import { UserService } from '../user/user.service';
 import { JwtService } from '@nestjs/jwt';
 import { LogInDto, RegisterDto } from './dto/auth.dto';
-import { User } from '../user/schemas/user.schema';
+import { User as UsereModel } from '@prisma/client';
 
 @Injectable()
 export class AuthService {
@@ -43,7 +43,8 @@ export class AuthService {
     if (!userInfo) throw new UnauthorizedException('token 已失效，请重新登录');
     return this.generateAuthInfo(userInfo, false);
   }
-  async generateAuthInfo(userInfo: User, isIncludingUserInfo: Boolean = true) {
+
+  async generateAuthInfo(userInfo: UsereModel, isIncludingUserInfo: Boolean = true) {
     const tokens = {
       accessToken: await this.generateJwtTokens(userInfo),
       refreshToken: await this.generateJwtTokens(userInfo, true),
@@ -53,10 +54,11 @@ export class AuthService {
       ...(isIncludingUserInfo ? { userInfo } : {}),
     };
   }
-  async generateJwtTokens(userInfo: User, isRefresh: Boolean = false) {
+
+  async generateJwtTokens(userInfo: UsereModel, isRefresh: Boolean = false) {
     let payload;
     if (isRefresh) payload = { userId: userInfo.id };
-    else payload = { userId: userInfo.id, username: userInfo.name };
+    else payload = { userId: userInfo.id, username: userInfo.profile.bio };
 
     return this.jwtService.signAsync(payload);
   }

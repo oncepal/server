@@ -1,22 +1,21 @@
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
-
-import { UserModule } from './user/user.module';
 import { CustomMiddleware } from '@libs/middlewares';
 import { AuthModule } from './auth/auth.module';
-import { PalModule } from './pal/pal.module';
 
 import { CommonModule } from '@libs/common';
+import { ChatroomModule } from './chatroom/chatroom.module';
+import { PostModule } from './post/post.module';
+import { UserModule } from './user/user.module';
+import { PalModule } from './pal/pal.module';
 @Module({
   imports: [
-    // PalModule,
-    // UserModule,
+    PalModule,
     AuthModule,
+    ChatroomModule,
+    PostModule,
+    UserModule,
     CommonModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {

@@ -17,12 +17,13 @@ import {
   Res,
 } from '@nestjs/common';
 import { UserService } from './user.service';
-import { CreateUserDto, UpdateUserDto } from './dto/user.dto';
+import { Prisma,User as UserModel } from '@prisma/client';
 import { Response } from 'express';
 import { error, generateParseIntPipe, generateSkip } from '@libs/utils';
+
 @Controller('user')
 export class UserController {
-  constructor(private readonly userService: UserService) { }
+  constructor(private readonly userService: UserService) {}
 
   /**
    * 创建用户
@@ -31,22 +32,20 @@ export class UserController {
    */
   @Post()
   @Header('content-type', 'application/json')
-  async createUser(@Body() userInfo: CreateUserDto, @Res() res: Response) {
-    if (userInfo?.phoneNumber) {
+  async user(@Body() user: Prisma.UserCreateInput, @Res() res: Response) {
+    if (user?.phoneNumber) {
       const existingUser = await this.userService.findOneByPhoneNumber(
-        userInfo?.phoneNumber,
+        user?.phoneNumber,
       );
 
       if (!existingUser) {
-        const res = this.userService.create(userInfo);
+        const res = this.userService.create(user);
         return res;
       } else {
-        return  error(res, 500, '已存在该用户！');
+        return error(res, 500, '已存在该用户！');
       }
-    } else return  error(res, 500, '缺少手机号！');
+    } else return error(res, 500, '缺少手机号！');
   }
-
-
 
   /**
    * 查询匹配条件的用户
@@ -54,19 +53,21 @@ export class UserController {
    * @returns 满足条件的用户列表
    */
   @Get()
-  async getUsers(
-    @Query('page', generateParseIntPipe('page')) page: number,
-    @Query('pageSize', generateParseIntPipe('pageSize')) pageSize: number,
-    @Query('phoneNumber') phoneNumber: string,
-    @Query('name') name: string,
-  ) {
-    const query = {
-      phoneNumber,
-      name
-    }
-    const skip = generateSkip(page,pageSize)
-    const r = await this.userService.find(skip,pageSize,query);
-    return r;
+  async users(params: {
+    skip?: number;
+    take?: number;
+    cursor?: Prisma.UserWhereUniqueInput;
+    where?: Prisma.UserWhereInput;
+    orderBy?: Prisma.UserOrderByWithRelationInput;
+  }): Promise<UserModel[]> {
+    const { skip, take, cursor, where, orderBy } = params;
+    return this.userService.findMany({
+      skip,
+      take,
+      cursor,
+      where,
+      orderBy,
+    });
   }
 
   /**
@@ -85,11 +86,9 @@ export class UserController {
    * @returns 修改后的用户信息
    */
   @Patch()
-  async updateUser(@Body() user: UpdateUserDto) {
+  async updateUser(@Body() user) {
+    return await this.userService.update(user);
 
-    const r = await this.userService.update(user);
-    if (!r) throw new Error();
-    return r;
   }
 
   /**
@@ -99,7 +98,7 @@ export class UserController {
    */
   @Delete(':id')
   async deleteUser(@Param('id') id: string) {
-    const r = await this.userService.delete(id);
+    const r = await this.userService.delete({id});
     return r;
   }
 }

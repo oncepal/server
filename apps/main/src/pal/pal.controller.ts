@@ -21,6 +21,7 @@ import { AuthGuard } from '@libs/guards';
 import { Public } from '@libs/decorators';
 import { generateParseIntPipe, generateSkip } from '@libs/utils';
 import { UserService } from '../user/user.service';
+
 @Controller('pal')
 export class PalController {
   @Inject()
@@ -32,20 +33,20 @@ export class PalController {
    * @param id 搭子需求id
    * @returns 用户详情对象
    */
-  @Get('random')
-  async getRandom(
-    @Query('userId') userId: string,
-    @Query('type') type: number,
-  ) {
-    const userInfo = await this.userService.findOneById(userId);
-    const query = {};
+  // @Get('random')
+  // async getRandom(
+  //   @Query('userId') userId: string,
+  //   @Query('type') type: number,
+  // ) {
+  //   const userInfo = await this.userService.findOneById(userId);
+  //   const query = {};
 
-    if (type == 1) {
-      // 高级盲盒有条件筛选根据userInfo
-    }
-    const matchedUserInfo = await this.userService.findOne(query);
-    return matchedUserInfo;
-  }
+  //   if (type == 1) {
+  //     // 高级盲盒有条件筛选根据userInfo
+  //   }
+  //   const matchedUserInfo = await this.userService.findOne(query);
+  //   return matchedUserInfo;
+  // }
 
   /**
    * @name 新建搭子需求

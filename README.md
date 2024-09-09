@@ -14,6 +14,7 @@ ONCEPAL后端Monorepos(Nest.js + MongoDB replica set + Prisma ODM).
 - Helmet 头保护
 - Throttler 限流
 - CORS 跨域支持
+- Common 封装（微服务架构支持）
 
 # 环境要求
 - Nest.js 10
