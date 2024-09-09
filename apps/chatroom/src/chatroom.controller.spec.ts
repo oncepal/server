@@ -14,9 +14,5 @@ describe('ChatroomController', () => {
     chatroomController = app.get<ChatroomController>(ChatroomController);
   });
 
-  describe('root', () => {
-    it('should return "Hello World!"', () => {
-      expect(chatroomController.getHello()).toBe('Hello World!');
-    });
-  });
+
 });

@@ -2,9 +2,9 @@
 import { Subjects } from '@casl/prisma';
   
 import {
-//   User,
-} from '@libs/prisma';
+  Post,
+} from '@prisma/client';
 
 export type PrismaSubjects = Subjects<{
-//   User: User;
+  Post: Post;
 }>;

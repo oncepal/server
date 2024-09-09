@@ -6,7 +6,7 @@ import {
     Model
   } from "@casl/prisma/runtime";
   import { hkt } from "@casl/ability";
-  import type { Prisma, PrismaClient } from "@libs/prisma";
+  import type { Prisma, PrismaClient } from "@prisma/client";
   
   type ModelName = Prisma.ModelName;
   type ModelWhereInput = {

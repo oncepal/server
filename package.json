@@ -12,7 +12,7 @@
     "dev": "nest start --watch",
     "db:pull": "prisma db pull",
     "db:push": "prisma db push",
-    "db:generate": "prisma generate. @casl/prisma",
+    "db:generate": "prisma generate . @casl/prisma",
     "docker": "docker-compose up -d",
     "debug:user": "nest start --debug --watch user",
     "debug:main": "nest start --debug --watch",

@@ -26,7 +26,7 @@ export class ChatroomService {
       data: {
         name,
         type: $Enums.ChatroomType.SINGLE,
-        users: [userId],
+        chaterIds: [userId],
       },
     });
 
@@ -49,7 +49,7 @@ export class ChatroomService {
     if (chatroom)
       await this.prismaService.chatroom.update({
         data: {
-          users: {
+          chaterIds: {
             push: userId,
           },
         },
@@ -63,7 +63,7 @@ export class ChatroomService {
   async list(userId: string) {
     const chatroomIds = await this.prismaService.chatroom.findMany({
       where: {
-        users: {
+        chaterIds: {
           has: userId,
         },
       },
@@ -99,7 +99,7 @@ export class ChatroomService {
 
     await this.prismaService.chatroom.update({
         data: {
-          users: chatroom.users.filter(u=>u!==userId),
+          chaterIds: chatroom.chaterIds.filter(u=>u!==userId),
         },
         where: {
           id,
