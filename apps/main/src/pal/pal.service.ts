@@ -1,8 +1,8 @@
-import { Need, NeedDocument } from './schemas/need.schema';
+import { Need, NeedDocument } from '@libs/schemas';
 import { InjectModel } from '@nestjs/mongoose';
 import { Injectable } from '@nestjs/common';
 import { Model } from 'mongoose';
-import { CreateNeedDto, UpdateNeedDto } from './dto/need.dto';
+import { CreateNeedDto, UpdateNeedDto } from '@libs/dtos';
 @Injectable()
 export class PalService {
   @InjectModel(Need.name)
@@ -39,7 +39,7 @@ export class PalService {
   }
   async update(need: UpdateNeedDto) {
     return await this.needModel
-      .findByIdAndUpdate(need.id, need, { new: true })
+      .findByIdAndUpdate((need as any)?.id, need, { new: true })
       .exec();
   }
   async delete(id: string) {

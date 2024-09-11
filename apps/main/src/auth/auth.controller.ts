@@ -1,6 +1,6 @@
 import { Body, Request,Controller, Post, HttpCode, HttpStatus, Get, UseGuards, Inject, Query, Patch } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { GetCaptchaDto, LogInDto,RefreshDto,RegisterDto } from './dto/auth.dto';
+import { GetCaptchaDto, LogInDto,RefreshDto,RegisterDto } from '@libs/dtos';
 
 import { Public } from '@libs/decorators';
 import { Prisma } from '@prisma/client';

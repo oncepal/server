@@ -6,7 +6,7 @@ import {
 } from '@nestjs/common';
 import { UserService } from '../user/user.service';
 import { JwtService } from '@nestjs/jwt';
-import { LogInDto, RegisterDto } from './dto/auth.dto';
+import { LogInDto, RegisterDto } from '@libs/dtos';
 import { Prisma, User, User as UsereModel } from '@prisma/client';
 
 @Injectable()
@@ -33,6 +33,9 @@ export class AuthService {
   async logIn(phoneNumber: string) {
     const user = await this.userService.findOneByPhoneNumber(
       phoneNumber);
+
+      console.log(user);
+      
     if (!user) {
       throw new UnauthorizedException('未查询到该用户');
     }

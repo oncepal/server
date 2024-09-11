@@ -16,7 +16,7 @@ import {
 } from '@nestjs/common';
 import { PalService } from './pal.service';
 
-import { CreateNeedDto, UpdateNeedDto } from './dto/need.dto';
+import { CreateNeedDto, UpdateNeedDto } from '@libs/dtos';
 import { AuthGuard } from '@libs/guards';
 import { Public } from '@libs/decorators';
 import { generateParseIntPipe, generateSkip } from '@libs/utils';

@@ -106,7 +106,8 @@
       "^@libs/configs(|/.*)$": "<rootDir>/libs/configs/src/$1",
       "^@libs/redis(|/.*)$": "<rootDir>/libs/redis/src/$1",
       "^@libs/casl(|/.*)$": "<rootDir>/libs/casl/src/$1",
-      "^@libs/common(|/.*)$": "<rootDir>/libs/common/src/$1"
+      "^@libs/common(|/.*)$": "<rootDir>/libs/common/src/$1",
+            "^@libs/schemas(|/.*)$": "<rootDir>/libs/schemas/src/$1"
     }
   },
   "engines": {

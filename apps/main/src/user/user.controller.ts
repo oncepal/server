@@ -20,6 +20,8 @@ import { UserService } from './user.service';
 import { Prisma,User as UserModel } from '@prisma/client';
 import { Response } from 'express';
 import { error, generateParseIntPipe, generateSkip } from '@libs/utils';
+import { Public } from '@libs/decorators';
+import { GetUsersDto } from 'libs/dtos/src';
 
 @Controller('user')
 export class UserController {
@@ -49,18 +51,16 @@ export class UserController {
 
   /**
    * 查询匹配条件的用户
-   * @query filter 查询条件
+   * @query params 查询条件
    * @returns 满足条件的用户列表
    */
+  @Public()
   @Get()
-  async users(params: {
-    skip?: number;
-    take?: number;
-    cursor?: Prisma.UserWhereUniqueInput;
-    where?: Prisma.UserWhereInput;
-    orderBy?: Prisma.UserOrderByWithRelationInput;
-  }): Promise<UserModel[]> {
+  async users(@Query() params: GetUsersDto): Promise<UserModel[]> {  
+     console.log(params);
     const { skip, take, cursor, where, orderBy } = params;
+ 
+    
     return this.userService.findMany({
       skip,
       take,
