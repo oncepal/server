@@ -7,7 +7,7 @@ import {
 import { UserService } from '../user/user.service';
 import { JwtService } from '@nestjs/jwt';
 import { LogInDto, RegisterDto } from './dto/auth.dto';
-import { User as UsereModel } from '@prisma/client';
+import { Prisma, User, User as UsereModel } from '@prisma/client';
 
 @Injectable()
 export class AuthService {
@@ -18,19 +18,29 @@ export class AuthService {
 
   private logger = new Logger();
 
-  async logIn(logInDto: LogInDto) {
-    const userInfo = await this.userService.findOne(logInDto);
-    if (!userInfo) {
-      throw new UnauthorizedException('未查询到该用户');
+  async logInWithRegister(phoneNumber: string) {
+    const user = await this.userService.findOneByPhoneNumber(
+      phoneNumber);
+
+    if (user) {
+      return user
     }
-    if (!userInfo) {
-      await this.register(logInDto);
-    }
-    return this.generateAuthInfo(userInfo);
+    const createdUser = await this.register(phoneNumber);
+
+    return createdUser
   }
 
-  async register(registerDto: RegisterDto) {
-    const createdUser = await this.userService.create(registerDto);
+  async logIn(phoneNumber: string) {
+    const user = await this.userService.findOneByPhoneNumber(
+      phoneNumber);
+    if (!user) {
+      throw new UnauthorizedException('未查询到该用户');
+    }
+    return user
+  }
+
+  async register(phoneNumber: string) {
+    const createdUser = await this.userService.create({phoneNumber});
     if (!createdUser) {
       throw new UnauthorizedException('注册失败！');
     }
@@ -44,7 +54,10 @@ export class AuthService {
     return this.generateAuthInfo(userInfo, false);
   }
 
-  async generateAuthInfo(userInfo: UsereModel, isIncludingUserInfo: Boolean = true) {
+  async generateAuthInfo(
+    userInfo: UsereModel,
+    isIncludingUserInfo: Boolean = true,
+  ) {
     const tokens = {
       accessToken: await this.generateJwtTokens(userInfo),
       refreshToken: await this.generateJwtTokens(userInfo, true),

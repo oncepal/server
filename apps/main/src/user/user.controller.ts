@@ -27,7 +27,7 @@ export class UserController {
 
   /**
    * 创建用户
-   * @body userInfo 用户信息
+   * @body user 用户信息
    * @returns 创建好的用户信息
    */
   @Post()

@@ -18,6 +18,8 @@ export class ResponseInterceptor implements NestInterceptor {
     if([200,201,202].includes(res.statusCode))
     res.statusCode = 200
     else res.statusCode = 500
+    console.log("res",res);
+    
    return next.handle().pipe( map(data => {
 
         const r = {

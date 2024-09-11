@@ -6,5 +6,6 @@ import { CommonModule } from '@libs/common';
   imports: [CommonModule],
   controllers: [UserController],
   providers: [UserService],
+  exports: [UserService],
 })
 export class UserModule {}

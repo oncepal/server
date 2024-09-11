@@ -37,6 +37,7 @@ export class UserService {
       where: userWhereUniqueInput,
     });
   }
+  
   async findOneById(id: string) {
     const user = await this.findOne({
       id,
