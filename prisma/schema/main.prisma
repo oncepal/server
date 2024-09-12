@@ -1,9 +1,11 @@
 generator client {
-  provider = "prisma-client-js"
-    previewFeatures = ["prismaSchemaFolder"]
+  provider        = "prisma-client-js"
+  previewFeatures = ["prismaSchemaFolder"]
 }
 
 datasource db {
   provider = "mongodb"
   url      = env("MONGODB_URI")
 }
+
+// 很少更新的 model 就考虑嵌入

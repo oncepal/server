@@ -1,0 +1,16 @@
+enum ChatroomType {
+  SINGLE
+  GROUP
+  MULTIPLE
+}
+
+model Chatroom {
+  id          String       @id @default(auto()) @map("_id") @db.ObjectId
+  creatorId   String?
+  description String?
+  type        ChatroomType
+  name        String?
+  chater      User[]         @relation(fields: [chaterIds], references: [id])
+  chaterIds   String[]     @db.ObjectId 
+  history     String[]
+}

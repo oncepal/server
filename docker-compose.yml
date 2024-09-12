@@ -2,15 +2,14 @@ services:
   # oncepal-main:
   #   container_name: oncepal-main
   #   depends_on:
-  #     - mongodb
-  #       - redis
+  #     - mongo0
+  #     - redis
   #   build:
   #     context: ./docker/nest
   #     args:
   #         - APP=main
   #   restart: always
   #   ports:
-
   #     - 19960:1996
   #   networks:
   #     - oncepal-network
@@ -18,7 +17,7 @@ services:
   # oncepal-user:
   #   container_name: oncepal-user
   #   depends_on:
-  #     - mongodb
+  #     - mongo0
   #       - redis
   #   build:
   #     context: ./docker/nest
@@ -43,33 +42,39 @@ services:
     networks:
       - oncepal-network
     volumes:
-            - db_volume:/data
+            - redis_volume:/data
 
-  mongo:
-    container_name: mongodb
-    image: mongo
+  mongo0:
+    container_name: mongo0
     build: 
       context: ./docker/mongodb
       args:
-        MONGO_VERSION: latest
-    restart: always
+        MONGO_VERSION: 7
+    restart: unless-stopped
     environment: 
-      MONGO_INITDB_ROOT_USERNAME: admin
-      MONGO_INITDB_ROOT_PASSWORD: password
-      MONGO_INITDB_DATABASE: oncepal
-      MONGO_REPLICA_HOST: localhost
+      MONGO_INITDB_NAME: oncepal 
       MONGO_REPLICA_PORT: 27017
+      MONGO_REPLICA_HOST: 127.0.0.1
+      MONGO_COMMAND: 'mongosh'
+    healthcheck:
+      test: ['CMD', 'mongosh', 'admin', '--port', '27019', '--eval', "db.adminCommand('ping').ok"]
+      interval: 5s
+      timeout: 2s
+      retries: 20
     ports:
       - 27017:27017
     networks:
       - oncepal-network
     volumes:
-            - db_volume:/data
+      - mongodb_volume:/data
+
 networks:
   oncepal-network:
     name: oncepal-network
     driver: bridge
 
 volumes:
-   db_volume:
-        name: "db_volume"
+   mongodb_volume:
+        name: "mongodb_volume"
+   redis_volume:
+        name: "redis_volume"

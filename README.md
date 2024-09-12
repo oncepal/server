@@ -6,6 +6,7 @@ ONCEPAL后端Monorepos(Nest.js + MongoDB replica set + Prisma ODM).
 - JWT 登录鉴权
 - CASL 权限控制集成
 - Data 分页排序过滤
+- Response Interceptor 统一返回结构
 - Exception Filters 异常过滤
 - Validation Pipes 参数管道控制
 - Docker Compose 部署集成
@@ -13,7 +14,10 @@ ONCEPAL后端Monorepos(Nest.js + MongoDB replica set + Prisma ODM).
 - Serializers 序列化
 - Helmet 头保护
 - Throttler 限流
-- CORS 跨域支持
+- WebSocket 集成
+- CORS 跨域请求
+- Common 微服务架构扩展支持
+- Mongoose Schema 原生数据库操作支持
 
 # 环境要求
 - Nest.js 10
@@ -78,17 +82,17 @@ pnpm install
 npm run db:generate
 ```
 
-3. 推送 MongoDB Schema 
+3. 推送 MongoDB Schema （非必须）
 
 ```
 npm run db:push
 ```
 
 
-4. Start the application
+4. 启动主服务
 
 ```
-npm run start:dev
+npm run dev
 ```
 
 ## JWT
@@ -108,15 +112,15 @@ providers: [
 ]
 ```
 
-### SkipAuth
-You can skip authentication for a route by using the `SkipAuth` decorator.
+### 跳过登录
+使用 `Public` 装饰器.
 
 ```typescript
-// app.controller.ts
+// user.controller.ts
 
-@SkipAuth()
+@Public()
 @Get()
-async findAll() {
+async users() {
     return await this.appService.findAll();
 }
 ```

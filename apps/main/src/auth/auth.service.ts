@@ -6,8 +6,8 @@ import {
 } from '@nestjs/common';
 import { UserService } from '../user/user.service';
 import { JwtService } from '@nestjs/jwt';
-import { LogInDto, RegisterDto } from './dto/auth.dto';
-import { User } from '../user/schemas/user.schema';
+import { LogInDto, RegisterDto } from '@libs/dtos';
+import { Prisma, User, User as UsereModel } from '@prisma/client';
 
 @Injectable()
 export class AuthService {
@@ -18,19 +18,32 @@ export class AuthService {
 
   private logger = new Logger();
 
-  async logIn(logInDto: LogInDto) {
-    const userInfo = await this.userService.findOne(logInDto);
-    if (!userInfo) {
-      throw new UnauthorizedException('未查询到该用户');
+  async logInWithRegister(phoneNumber: string) {
+    const user = await this.userService.findOneByPhoneNumber(
+      phoneNumber);
+
+    if (user) {
+      return user
     }
-    if (!userInfo) {
-      await this.register(logInDto);
-    }
-    return this.generateAuthInfo(userInfo);
+    const createdUser = await this.register(phoneNumber);
+
+    return createdUser
   }
 
-  async register(registerDto: RegisterDto) {
-    const createdUser = await this.userService.create(registerDto);
+  async logIn(phoneNumber: string) {
+    const user = await this.userService.findOneByPhoneNumber(
+      phoneNumber);
+
+      console.log(user);
+      
+    if (!user) {
+      throw new UnauthorizedException('未查询到该用户');
+    }
+    return user
+  }
+
+  async register(phoneNumber: string) {
+    const createdUser = await this.userService.create({phoneNumber});
     if (!createdUser) {
       throw new UnauthorizedException('注册失败！');
     }
@@ -43,7 +56,11 @@ export class AuthService {
     if (!userInfo) throw new UnauthorizedException('token 已失效，请重新登录');
     return this.generateAuthInfo(userInfo, false);
   }
-  async generateAuthInfo(userInfo: User, isIncludingUserInfo: Boolean = true) {
+
+  async generateAuthInfo(
+    userInfo: UsereModel,
+    isIncludingUserInfo: Boolean = true,
+  ) {
     const tokens = {
       accessToken: await this.generateJwtTokens(userInfo),
       refreshToken: await this.generateJwtTokens(userInfo, true),
@@ -53,10 +70,11 @@ export class AuthService {
       ...(isIncludingUserInfo ? { userInfo } : {}),
     };
   }
-  async generateJwtTokens(userInfo: User, isRefresh: Boolean = false) {
+
+  async generateJwtTokens(userInfo: UsereModel, isRefresh: Boolean = false) {
     let payload;
     if (isRefresh) payload = { userId: userInfo.id };
-    else payload = { userId: userInfo.id, username: userInfo.name };
+    else payload = { userId: userInfo.id, username: userInfo.profile.bio };
 
     return this.jwtService.signAsync(payload);
   }

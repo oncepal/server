@@ -10,11 +10,13 @@
     "format": "prettier --write \"apps/**/*.ts\" \"libs/**/*.ts\"",
     "start": "nest start",
     "dev": "nest start --watch",
-    "db:pull": "npx prisma db pull",
-    "db:push": "npx prisma db push",
-    "db:generate": "prisma generate",
-    "docker": "docker-compose up -d",
-    "debug:user": "nest start --debug --watch user",
+    "dev:chatroom": "nest start --watch chatroom",
+    "db:pull": "prisma db pull",
+    "db:push": "prisma db push",
+    "db:studio": "prisma studio",
+    "db:generate": "prisma generate . @casl/prisma",
+    "docker:up": "docker-compose up -d",
+    "mongosh":"docker exec -it mongodb bash",
     "debug:main": "nest start --debug --watch",
     "start:prod": "node dist/apps/main/main",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
@@ -25,6 +27,8 @@
     "test:e2e": "jest --config ./apps/main/test/jest-e2e.json"
   },
   "dependencies": {
+    "@casl/ability": "^6.7.1",
+    "@casl/prisma": "^1.4.1",
     "@nestjs/common": "^10.0.0",
     "@nestjs/config": "^3.2.2",
     "@nestjs/core": "^10.0.0",
@@ -33,7 +37,9 @@
     "@nestjs/microservices": "^10.3.10",
     "@nestjs/mongoose": "^10.0.1",
     "@nestjs/platform-express": "^10.0.0",
+    "@nestjs/platform-socket.io": "^10.4.1",
     "@nestjs/throttler": "^6.1.0",
+    "@nestjs/websockets": "^10.4.1",
     "@prisma/client": "^5.19.0",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.0",
@@ -41,7 +47,8 @@
     "ioredis": "^5.4.1",
     "mongoose": "^7.6.3",
     "reflect-metadata": "^0.1.13",
-    "rxjs": "^7.8.1"
+    "rxjs": "^7.8.1",
+    "socket.io": "^4.7.5"
   },
   "devDependencies": {
     "@nestjs/cli": "^10.0.0",
@@ -97,7 +104,10 @@
       "^@libs/constants(|/.*)$": "<rootDir>/libs/constants/src/$1",
       "^@libs/guards(|/.*)$": "<rootDir>/libs/guards/src/$1",
       "^@libs/configs(|/.*)$": "<rootDir>/libs/configs/src/$1",
-      "^@libs/redis(|/.*)$": "<rootDir>/libs/redis/src/$1"
+      "^@libs/redis(|/.*)$": "<rootDir>/libs/redis/src/$1",
+      "^@libs/casl(|/.*)$": "<rootDir>/libs/casl/src/$1",
+      "^@libs/common(|/.*)$": "<rootDir>/libs/common/src/$1",
+            "^@libs/schemas(|/.*)$": "<rootDir>/libs/schemas/src/$1"
     }
   },
   "engines": {

@@ -1,58 +1,77 @@
-import { User } from './schemas/user.schema';
+import { BadRequestException, Inject, Injectable } from '@nestjs/common';
+import { PrismaService } from '@libs/prisma';
+import { $Enums, Prisma, User } from '@prisma/client';
 
-import { InjectModel } from '@nestjs/mongoose';
-import { Inject, Injectable } from '@nestjs/common';
-import { Model } from 'mongoose';
-import { CreateUserDto, UpdateUserDto } from './dto/user.dto';
 @Injectable()
 export class UserService {
+  @Inject(PrismaService)
+  private prismaService: PrismaService;
 
-
-  @InjectModel(User.name) 
-  private readonly userModel: Model<User>;
-
-  async create(createUserDto: Partial<CreateUserDto>):Promise<User> {
-    const createdUser = new this.userModel(createUserDto)
-    return createdUser.save();
+  async create(user: Prisma.UserCreateInput): Promise<User> {
+    const createUser = await this.prismaService.user.create({ data: user });
+    return createUser;
   }
 
-  async find(skip:number,limit:number,query?: Partial<User>) {
+  async findMany(params: {
+    skip?: number;
+    take?: number;
+    cursor?: Prisma.UserWhereUniqueInput;
+    where?: Prisma.UserWhereInput;
+    orderBy?: Prisma.UserOrderByWithRelationInput;
+  }): Promise<User[]> {
+    console.log(params);
+    
+    const { skip, take, cursor, where, orderBy } = params;
+    return this.prismaService.user.findMany({
+      skip,
+      take,
+      cursor,
+      where,
+      orderBy,
+    });
+    // return { results, count };
+  }
 
-    const findQuery = this.userModel
-      .find(query)
-      .sort({ _id: 1 })
-      .skip(skip)
-      .populate("author")
-      .populate("categories");
-
-    if (limit) {
-      findQuery.limit(limit);
-    }
-    const results = await findQuery;
-    const count = await this.userModel.count();
-    return { results, count };
+  async findOne(
+    userWhereUniqueInput: Prisma.UserWhereUniqueInput,
+  ): Promise<User | null> {
+    return this.prismaService.user.findUnique({
+      where: userWhereUniqueInput,
+    });
   }
   
   async findOneById(id: string) {
-    return await this.userModel.findById(id).exec();
+    const user = await this.findOne({
+      id,
+    });
+
+    return user;
   }
   async findOneByPhoneNumber(phoneNumber: string) {
-    return await this.userModel.findOne({ phoneNumber }).exec();
-  }
-  async findOne(user: Record<string, any>) {
-    return await this.userModel.findOne(user).exec();
-  }
-  async update(user: UpdateUserDto) {
-    console.log('user.id', user);
+    const user = await this.findOne({
+      phoneNumber,
+    });
 
-    return await this.userModel
-      .findByIdAndUpdate(user.id, user, { new: true })
-      .exec();
+    return user;
   }
-  async delete(id: string) {
-    return await this.userModel.findByIdAndRemove(id).exec();
+
+  async update(params: {
+    where: Prisma.UserWhereUniqueInput;
+    data: Prisma.UserUpdateInput;
+  }): Promise<User> {
+    const { data, where } = params;
+    return this.prismaService.user.update({
+      data,
+      where,
+    });
   }
+  async delete(where: Prisma.UserWhereUniqueInput): Promise<User> {
+    return this.prismaService.user.delete({
+      where,
+    });
+  }
+
   async deleteAll() {
-    return await this.userModel.deleteMany();
+    return await this.prismaService.user.deleteMany();
   }
 }
