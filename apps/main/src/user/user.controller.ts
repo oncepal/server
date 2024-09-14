@@ -57,10 +57,8 @@ export class UserController {
   @Public()
   @Get()
   async users(@Query() params: GetUsersDto): Promise<UserModel[]> {  
-     console.log(params);
     const { skip, take, cursor, where, orderBy } = params;
  
-    
     return this.userService.findMany({
       skip,
       take,

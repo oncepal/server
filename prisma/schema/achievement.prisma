@@ -1,0 +1,15 @@
+type AchievementBenefit {
+    name        String
+    description String?
+}
+model Achievement {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  type        String @unique
+  description String?
+  benefits AchievementBenefit[]
+  user      User[]         @relation(fields: [userIds], references: [id])
+  userIds   String[]     @db.ObjectId 
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @default(now()) @updatedAt
+}

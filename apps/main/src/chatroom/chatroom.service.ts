@@ -8,16 +8,13 @@ export class ChatroomService {
   private prismaService: PrismaService;
 
   async createSingleChatroom(friendId: number, userId: string) {
-    const { id } = await this.prismaService.chatroom.create({
+    const chatroom = await this.prismaService.chatroom.create({
       data: {
         name: '聊天室' + Math.random().toString().slice(2, 8),
         type: $Enums.ChatroomType.SINGLE,
       },
-      select: {
-        id: true,
-      },
-    });
 
+    });
     return '创建成功';
   }
 

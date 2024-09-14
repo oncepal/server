@@ -1,0 +1,9 @@
+model Comment {
+   id            String  @id @default(auto()) @map("_id") @db.ObjectId
+   title         String
+   content       String
+   commentator   User    @relation(fields: [commentatorId], references: [id])
+   commentatorId String  @unique @db.ObjectId
+   post          Post   @relation(fields: [postId], references: [id]) // A comment can have one post
+   postId        String @unique @db.ObjectId
+}

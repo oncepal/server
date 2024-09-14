@@ -1,17 +1,4 @@
-enum OrderStatus {
-  CREATED @map("created") // 已创建
-  CONFIRMED @map("confirmed") // 已确认
-  PENDING   @map("pending") // 支付中
-  COMPLETE @map("complete") // 已完成
-  CANCELED @map("canceled") // 已取消    
-  REFUNDED @map("refunded") // 已退款
-}
 
-enum PaymentStatus {
-  EXPIRED @map("expired") // 已超时
-  COMPLETE  @map("complete") // 已支付
-  UNCLEARED @map("uncleared") // 未支付
-}
 
 model Order {
   id            String        @id @default(auto()) @map("_id") @db.ObjectId
