@@ -11,9 +11,9 @@ import { PrismaSubjects } from './casl.subjects';
 import { Injectable } from '@nestjs/common';
 
 import { Post } from '@prisma/client';
-const { MANAGE,UPDATE,DELETE,CREATE,READ} = Action
-const {ADMIM,USER} = Role
-/** A union of subjects to extend the ability beyond just Prisma models */
+const { MANAGE, UPDATE, DELETE, CREATE, READ } = Action;
+const { ADMIM, USER } = Role;
+
 type ExtendedSubjects = 'all';
 export type AppSubjects = PrismaSubjects | ExtendedSubjects;
 export type AppAbility = PureAbility<[Action, AppSubjects], PrismaQuery>;
@@ -28,9 +28,12 @@ export class CaslAbilityFactory {
     if (user.roles.includes(ADMIM)) {
       can(MANAGE, 'all');
     } else {
-      if(user.roles.includes(USER))  
-      can(UPDATE, 'Post', { authorId: user.id });
-      cannot(DELETE, 'Post');
+      if (user.roles.includes(USER)) {
+        can(MANAGE, 'all');
+        cannot(DELETE, 'Post');
+        cannot(DELETE, 'User');
+        cannot(DELETE, 'Chatroom');
+      }
     }
 
     return build();

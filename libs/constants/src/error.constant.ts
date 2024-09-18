@@ -14,5 +14,6 @@ export enum Error {
   VALIDATION_ERROR= '422: Validation error',
 
   INTERNAL_SERVER_ERROR= '500: Internal server error',
+  MISS_LONIN_ERROR= '用户未登录！',
 }
 

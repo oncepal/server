@@ -17,13 +17,18 @@ import {
   Res,
 } from '@nestjs/common';
 import { UserService } from './user.service';
-import { Prisma,User as UserModel } from '@prisma/client';
+import { Prisma, User as UserModel } from '@prisma/client';
 import { Response } from 'express';
 import { error, generateParseIntPipe, generateSkip } from '@libs/utils';
 import { Public } from '@libs/decorators';
 import { GetUsersDto } from 'libs/dtos/src';
+import {
+  PoliciesGuard,
+  CheckPolicies,
+  DeleteUserPolicyHandler,
+} from '@libs/guards';
 
-@Controller('user')
+@Controller()
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
@@ -32,7 +37,7 @@ export class UserController {
    * @body user 用户信息
    * @returns 创建好的用户信息
    */
-  @Post()
+  @Post('user')
   @Header('content-type', 'application/json')
   async user(@Body() user: Prisma.UserCreateInput, @Res() res: Response) {
     if (user?.phoneNumber) {
@@ -55,10 +60,10 @@ export class UserController {
    * @returns 满足条件的用户列表
    */
   @Public()
-  @Get()
-  async users(@Query() params: GetUsersDto): Promise<UserModel[]> {  
+  @Get('users')
+  async users(@Query() params: GetUsersDto): Promise<UserModel[]> {
     const { skip, take, cursor, where, orderBy } = params;
- 
+
     return this.userService.findMany({
       skip,
       take,
@@ -73,7 +78,7 @@ export class UserController {
    * @param id 用户id
    * @returns 用户详情对象
    */
-  @Get(':id')
+  @Get('user/:id')
   async getUserById(@Param('id') id: string) {
     return await this.userService.findOneById(id);
   }
@@ -83,10 +88,9 @@ export class UserController {
    * @body 用户信息
    * @returns 修改后的用户信息
    */
-  @Patch()
+  @Patch('user/:id')
   async updateUser(@Body() user) {
     return await this.userService.update(user);
-
   }
 
   /**
@@ -94,9 +98,24 @@ export class UserController {
    * @param id 用户id
    * @returns 删除成功与否
    */
-  @Delete(':id')
+  @Delete('user/:id')
+  @UseGuards(PoliciesGuard)
+  @CheckPolicies(new DeleteUserPolicyHandler())
   async deleteUser(@Param('id') id: string) {
-    const r = await this.userService.delete({id});
+    const r = await this.userService.delete({ id });
+    return r;
+  }
+
+  /**
+   * 清空用户
+   * @param id 用户id
+   * @returns 删除成功与否
+   */
+  @Delete('users')
+  @UseGuards(PoliciesGuard)
+  @CheckPolicies(new DeleteUserPolicyHandler())
+  async deleteUsers() {
+    const r = await this.userService.deleteAll();
     return r;
   }
 }

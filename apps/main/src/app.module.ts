@@ -8,13 +8,14 @@ import { PostModule } from './post/post.module';
 import { UserModule } from './user/user.module';
 import { PalModule } from './pal/pal.module';
 @Module({
-  imports: [
+  imports: [ 
+    CommonModule,
     PalModule,
     AuthModule,
     ChatroomModule,
     PostModule,
     UserModule,
-    CommonModule,
+   
   ],
 })
 export class AppModule implements NestModule {

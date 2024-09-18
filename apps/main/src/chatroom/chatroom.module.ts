@@ -2,9 +2,8 @@ import { Module } from '@nestjs/common';
 import { ChatroomController } from './chatroom.controller';
 import { ChatroomService } from './chatroom.service';
 import { ChatroomGateway } from './chatroom.gateway';
-import { CommonModule } from '@libs/common';
 @Module({
-  imports: [CommonModule],
+  imports: [],
   controllers: [ChatroomController],
   providers: [ChatroomGateway,ChatroomService],
 })

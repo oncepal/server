@@ -5,9 +5,9 @@ import { Reflector } from '@nestjs/core';
 
 // @Get()
 // @UseGuards(PoliciesGuard)
-// @CheckPolicies(new ReadArticlePolicyHandler())
-// findAll() {
-//   return this.articlesService.findAll();
+// @CheckPolicies(new DeleteUserPolicyHandler())
+// deleteAll() {
+//   return this.userService.deleteAll();
 // }
 
 interface IPolicyHandler {
@@ -17,9 +17,9 @@ interface IPolicyHandler {
 type PolicyHandlerCallback = (ability: AppAbility) => boolean;
 
 export type PolicyHandler = IPolicyHandler | PolicyHandlerCallback;
-export class ReadArticlePolicyHandler implements IPolicyHandler {
+export class DeleteUserPolicyHandler implements IPolicyHandler {
     handle(ability: AppAbility) {
-      return ability.can(Action.READ, Article);
+      return ability.can(Action.DELETE, 'User');
     }
   }
 

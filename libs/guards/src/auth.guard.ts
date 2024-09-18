@@ -8,7 +8,7 @@ import {
 import { Reflector } from '@nestjs/core';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
-import { IS_PUBLIC } from '@libs/constants'
+import { Error, IS_PUBLIC } from '@libs/constants'
 
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -31,7 +31,7 @@ export class AuthGuard implements CanActivate {
     const request = context.switchToHttp().getRequest();
     const accessToken = this.extractTokenFromHeader(request);
     if (!accessToken) {
-      throw new UnauthorizedException("未登录！");
+      throw new UnauthorizedException(Error.MISS_LONIN_ERROR);
     }
     try {
       const payload = await this.jwtService.verifyAsync(accessToken, {
@@ -39,7 +39,7 @@ export class AuthGuard implements CanActivate {
       });
       request['user'] = payload;
     } catch {
-      throw new UnauthorizedException("未登录！");
+      throw new UnauthorizedException(Error.MISS_LONIN_ERROR);
     }
     return true;
   }

@@ -3,41 +3,60 @@ import { MessagePattern } from '@nestjs/microservices';
 import { Prisma, Chatroom } from '@prisma/client';
 import {
   BadRequestException,
+  Body,
   Controller,
+  Delete,
   Get,
   Param,
+  Patch,
+  Post,
+  Put,
   Query,
+  Res,
 } from '@nestjs/common';
 import { UserInfo } from '@libs/decorators';
+import { CreateChatroomDto } from '@libs/dtos';
 
 @Controller('chatroom')
 export class ChatroomController {
   constructor(private readonly chatroomService: ChatroomService) {}
 
-  @Get('single')
-  async oneToOne(
-    @Query('friendId') friendId: number,
-    @UserInfo('userId') userId: string,
+  @Post('single')
+  async single(
+    @Body() chatroom: CreateChatroomDto,
   ) {
-    if (!friendId) {
-      throw new BadRequestException('聊天好友的 id 不能为空');
-    }
-    return this.chatroomService.createSingleChatroom(friendId, userId);
+    return this.chatroomService.create(chatroom);
   }
 
-  @Get('group')
-  async group(@Query('name') name: string, @UserInfo('userId') userId: string) {
-    return this.chatroomService.createGroupChatroom(name, userId);
-  }
 
-  @Get('list')
-  async list(@UserInfo('userId') userId: string) {
+  @Get()
+  async chatrooms(@UserInfo('userId') userId: string) {
     if (!userId) {
       throw new BadRequestException('userId 不能为空');
     }
     return this.chatroomService.list(userId);
   }
-  @Get('quit/:id')
+
+  @Get('/:id')
+  async chatroom(@UserInfo('userId') userId: string) {
+    if (!userId) {
+      throw new BadRequestException('userId 不能为空');
+    }
+    return this.chatroomService.list(userId);
+  }
+
+  @Patch('join/:id')
+  async join(@Param('id') id: string, @Query('joinUserId') joinUserId: string) {
+    if (!id) {
+      throw new BadRequestException('id 不能为空');
+    }
+    if (!joinUserId) {
+      throw new BadRequestException('joinUserId 不能为空');
+    }
+    return this.chatroomService.join(id, joinUserId);
+  }
+
+  @Patch('quit/:id')
   async quit(@Param('id') id: string, @Query('quitUserId') quitUserId: string) {
     if (!id) {
       throw new BadRequestException('id 不能为空');
@@ -47,14 +66,15 @@ export class ChatroomController {
     }
     return this.chatroomService.quit(id, quitUserId);
   }
-  @Get('join/:id')
-  async join(@Param('id') id: string, @Query('joinUserId') joinUserId: string) {
+
+  @Delete(':id')
+  async delete(@Param('id') id: string, @Query('quitUserId') quitUserId: string) {
     if (!id) {
       throw new BadRequestException('id 不能为空');
     }
-    if (!joinUserId) {
-      throw new BadRequestException('joinUserId 不能为空');
+    if (!quitUserId) {
+      throw new BadRequestException('quitUserId 不能为空');
     }
-    return this.chatroomService.join(id, joinUserId);
+    return this.chatroomService.quit(id, quitUserId);
   }
 }

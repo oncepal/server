@@ -7,7 +7,7 @@ export class UserService {
   @Inject(PrismaService)
   private prismaService: PrismaService;
 
-  async create(user: Prisma.UserCreateInput): Promise<User> {
+  async create(user: Prisma.UserUncheckedCreateInput): Promise<User> {
     const createUser = await this.prismaService.user.create({ data: user });
     
     return createUser;
@@ -57,7 +57,7 @@ export class UserService {
 
   async update(params: {
     where: Prisma.UserWhereUniqueInput;
-    data: Prisma.UserUpdateInput;
+    data: Prisma.UserUncheckedUpdateInput;
   }): Promise<User> {
     const { data, where } = params;
     return this.prismaService.user.update({

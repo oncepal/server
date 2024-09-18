@@ -4,9 +4,11 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ThrottlerModule } from '@nestjs/throttler';
 import { MongooseModule } from '@nestjs/mongoose';
 import { PrismaModule } from '@libs/prisma';
+import { CaslModule } from '@libs/casl';
 @Module({
   imports:[
     PrismaModule,
+    CaslModule,
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: '.env', 
@@ -24,6 +26,6 @@ import { PrismaModule } from '@libs/prisma';
     }]),
   ],
   providers: [CommonService],
-  exports: [CommonService,PrismaModule],
+  exports: [CommonService],
 })
 export class CommonModule {}
