@@ -1,39 +1,39 @@
 enum PaymentMethod {
-    AA    @map("aa") // aa支付
-    NONE  @map("none") // 免费
-    FIXED @map("fixed") // 固定支付
+  AA    @map("aa") // aa支付
+  NONE  @map("none") // 免费
+  FIXED @map("fixed") // 固定支付
 }
 
 enum OrderStatus {
-    CREATED   @map("created") // 已创建
-    CONFIRMED @map("confirmed") // 已确认
-    PENDING   @map("pending") // 支付中
-    COMPLETE  @map("complete") // 已完成
-    CANCELED  @map("canceled") // 已取消    
-    REFUNDED  @map("refunded") // 已退款
+  CREATED   @map("created") // 已创建
+  CONFIRMED @map("confirmed") // 已确认
+  PENDING   @map("pending") // 支付中
+  COMPLETE  @map("complete") // 已完成
+  CANCELED  @map("canceled") // 已取消    
+  REFUNDED  @map("refunded") // 已退款
 }
 
 enum PaymentStatus {
-    EXPIRED   @map("expired") // 已超时
-    COMPLETE  @map("complete") // 已支付
-    UNCLEARED @map("uncleared") // 未支付
+  EXPIRED   @map("expired") // 已超时
+  COMPLETE  @map("complete") // 已支付
+  UNCLEARED @map("uncleared") // 未支付
 }
 
 enum Role {
-    ADMIN @map("admin") // 管理员
-    USER  @map("user") // 用户
+  ADMIN @map("admin") // 管理员
+  USER  @map("user") // 用户
 }
 
 enum Gender {
-    Male   @map("male") // 男
-    Female @map("female") // 女
+  Male   @map("male") // 男
+  Female @map("female") // 女
 }
 
 enum UserStatus {
-    OPEN      @map("open") // 正常
-    CLOSING   @map("closing") // 正在注销
-    CLOSED    @map("closed") // 已注销
-    VIOLATION @map("violation") // 违规
-    BLOCKED   @map("blocked") // 封禁
-    EXPIRED   @map("expired") // 过期
+  OPEN      @map("open") // 正常
+  CLOSING   @map("closing") // 正在注销
+  CLOSED    @map("closed") // 已注销
+  VIOLATION @map("violation") // 违规
+  BLOCKED   @map("blocked") // 封禁
+  EXPIRED   @map("expired") // 过期
 }

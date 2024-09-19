@@ -21,7 +21,7 @@ import { Prisma, User as UserModel } from '@prisma/client';
 import { Response } from 'express';
 import { error, generateParseIntPipe, generateSkip } from '@libs/utils';
 import { Public } from '@libs/decorators';
-import { GetUsersDto } from 'libs/dtos/src';
+import { CreateUserDto, GetUsersDto, UpdateUserDto } from '@libs/dtos';
 import {
   PoliciesGuard,
   CheckPolicies,
@@ -39,7 +39,7 @@ export class UserController {
    */
   @Post('user')
   @Header('content-type', 'application/json')
-  async user(@Body() user: Prisma.UserCreateInput, @Res() res: Response) {
+  async user(@Body() user: CreateUserDto, @Res() res: Response) {
     if (user?.phoneNumber) {
       const existingUser = await this.userService.findOneByPhoneNumber(
         user?.phoneNumber,
@@ -56,13 +56,13 @@ export class UserController {
 
   /**
    * 查询匹配条件的用户
-   * @query params 查询条件
+   * @query querys 查询条件
    * @returns 满足条件的用户列表
    */
   @Public()
   @Get('users')
-  async users(@Query() params: GetUsersDto): Promise<UserModel[]> {
-    const { skip, take, cursor, where, orderBy } = params;
+  async users(@Query() querys: GetUsersDto): Promise<UserModel[]> {
+    const { skip, take, cursor, where, orderBy } = querys;
 
     return this.userService.findMany({
       skip,
@@ -89,8 +89,8 @@ export class UserController {
    * @returns 修改后的用户信息
    */
   @Patch('user/:id')
-  async updateUser(@Body() user) {
-    return await this.userService.update(user);
+  async updateUser(@Param('id') userId:string,@Body() updateUserDto:UpdateUserDto) {
+    return await this.userService.updateUserById(userId,updateUserDto);
   }
 
   /**

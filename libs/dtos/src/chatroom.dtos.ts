@@ -1,4 +1,4 @@
-import { Prisma,$Enums } from '@prisma/client';
+import { Prisma, $Enums } from '@prisma/client';
 import { Type } from 'class-transformer';
 import {
   IsString,
@@ -19,23 +19,27 @@ export class GetChatroomsDto {
 }
 
 export class GetChatroomDto {
-    @IsString({message:'id必须是一个字符串'})
-    id: string;
+  @IsString({ message: 'id必须是一个字符串' })
+  chatroomId: string;
 }
 
 export class JoinChatroomDto {
-    @IsString({
-    message:'id必须是一个字符串'})
-    id: string;
+  @IsString({
+    message: 'id必须是一个字符串',
+  })
+  userId: string;
 }
 export class CreateChatroomDto {
-    creatorId?: string | null;
-    description?: string | null;
+  creatorId?: string | null;
+  description?: string | null;
 
-    @IsNotEmpty({message:'聊天室类型不能为空！'})
-    type: $Enums.ChatroomType;
-    name?: string | null;
+  @IsNotEmpty({ message: '聊天室类型不能为空！' })
+  type: $Enums.ChatroomType;
+  name?: string | null;
 }
 export class QuitChatroomDto {
-
+  @IsString({
+    message: 'id必须是一个字符串',
+  })
+  userId: string;
 }

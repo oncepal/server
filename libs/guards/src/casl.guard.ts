@@ -1,6 +1,11 @@
-import { AppAbility,CaslAbilityFactory } from '@libs/casl';
+import { AppAbility, CaslAbilityFactory } from '@libs/casl';
 import { Action, CHECK_POLICIES_KEY } from '@libs/constants';
-import { CanActivate, ExecutionContext, Injectable, SetMetadata } from '@nestjs/common';
+import {
+  CanActivate,
+  ExecutionContext,
+  Injectable,
+  SetMetadata,
+} from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 
 // @Get()
@@ -18,11 +23,15 @@ type PolicyHandlerCallback = (ability: AppAbility) => boolean;
 
 export type PolicyHandler = IPolicyHandler | PolicyHandlerCallback;
 export class DeleteUserPolicyHandler implements IPolicyHandler {
-    handle(ability: AppAbility) {
-      return ability.can(Action.DELETE, 'User');
-    }
+  handle(ability: AppAbility) {
+    return ability.can(Action.DELETE, 'User');
   }
-
+}
+export class DeletePostPolicyHandler implements IPolicyHandler {
+  handle(ability: AppAbility) {
+    return ability.can(Action.DELETE, 'Post');
+  }
+}
 export const CheckPolicies = (...handlers: PolicyHandler[]) =>
   SetMetadata(CHECK_POLICIES_KEY, handlers);
 

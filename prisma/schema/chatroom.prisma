@@ -10,7 +10,7 @@ model Chatroom {
   description String?
   type        ChatroomType
   name        String?
-  chater      User[]         @relation(fields: [chaterIds], references: [id])
-  chaterIds   String[]     @db.ObjectId 
+  chater      User[]       @relation(fields: [chaterIds], references: [id])
+  chaterIds   String[]     @db.ObjectId
   history     String[]
 }
