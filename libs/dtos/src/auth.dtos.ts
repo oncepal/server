@@ -8,7 +8,9 @@ export class LogInDto {
     })
     phoneNumber:string
 }
-
+export class LogOutDto extends LogInDto{
+   
+}
 export class RegisterDto extends LogInDto{
   
 }

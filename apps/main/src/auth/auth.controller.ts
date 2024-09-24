@@ -1,6 +1,6 @@
 import { Body, Request,Controller, Post, HttpCode, HttpStatus, Get, UseGuards, Inject, Query, Patch } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { GetCaptchaDto, LogInDto,RefreshDto,RegisterDto } from '@libs/dtos';
+import { GetCaptchaDto, LogInDto,LogOutDto,RefreshDto,RegisterDto } from '@libs/dtos';
 
 import { Public } from '@libs/decorators';
 import { Prisma } from '@prisma/client';
@@ -9,6 +9,13 @@ export class AuthController {
 
   @Inject()
   private authService: AuthService
+
+  @Public()
+  @HttpCode(HttpStatus.OK)
+  @Post('logout')
+  logout(@Body() logOutDto: LogOutDto) {
+    return this.authService.logOut(logOutDto.phoneNumber);
+  }
 
   @Public()
   @HttpCode(HttpStatus.OK)

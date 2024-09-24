@@ -21,7 +21,7 @@ import { Prisma, Post as PostModel } from '@prisma/client';
 import { Response } from 'express';
 import { error, generateParseIntPipe, generateSkip } from '@libs/utils';
 import { Public } from '@libs/decorators';
-import { GetPostsDto } from '@libs/dtos';
+import { GetPostsDto,CreatePostDto,UpdatePostDto } from '@libs/dtos';
 import {
   PoliciesGuard,
   CheckPolicies,
@@ -39,8 +39,8 @@ export class PostController {
    */
   @Post('post')
   @Header('content-type', 'application/json')
-  async post(@Body() post: Prisma.PostCreateInput, @Res() res: Response) {
-    return this.postService.create(post);
+  async post(@Body() createPostDto: CreatePostDto, @Res() res: Response) {
+    return this.postService.create(createPostDto);
   }
 
   /**
@@ -50,8 +50,8 @@ export class PostController {
    */
   @Public()
   @Get('posts')
-  async posts(@Query() params: GetPostsDto): Promise<PostModel[]> {
-    const { skip, take, cursor, where, orderBy } = params;
+  async posts(@Query() getPostsDto: GetPostsDto): Promise<PostModel[]> {
+    const { skip, take, cursor, where, orderBy } = getPostsDto;
 
     return this.postService.findMany({
       skip,
@@ -63,9 +63,9 @@ export class PostController {
   }
 
   /**
-   * 查询用户详情
-   * @param id 用户id
-   * @returns 用户详情对象
+   * 查询帖子详情
+   * @param id 帖子id
+   * @returns 帖子详情对象
    */
   @Get('post/:id')
   async getPostById(@Param('id') id: string) {
@@ -73,9 +73,9 @@ export class PostController {
   }
 
   /**
-   * 修改用户信息
-   * @body 用户信息
-   * @returns 修改后的用户信息
+   * 修改帖子信息
+   * @body 帖子信息
+   * @returns 修改后的帖子信息
    */
   @Patch('post/:id')
   async updatePost(@Body() post) {
@@ -83,8 +83,8 @@ export class PostController {
   }
 
   /**
-   * 删除用户
-   * @param id 用户id
+   * 删除帖子
+   * @param id 帖子id
    * @returns 删除成功与否
    */
   @Delete('post/:id')
@@ -96,9 +96,8 @@ export class PostController {
   }
 
   /**
-   * 清空用户
-   * @param id 用户id
-   * @returns 删除成功与否
+   * 清空帖子
+   * @returns 清空成功与否
    */
   @Delete('posts')
   @UseGuards(PoliciesGuard)

@@ -7,7 +7,7 @@ export class PostService {
   @Inject(PrismaService)
   private prismaService: PrismaService;
 
-  async create(post: Prisma.PostCreateInput): Promise<Post> {
+  async create(post: Prisma.PostUncheckedCreateInput): Promise<Post> {
     const createPost = await this.prismaService.post.create({ data: post });
     return createPost;
   }
@@ -37,6 +37,7 @@ export class PostService {
       where: postWhereUniqueInput,
     });
   }
+  
   async findOneById(id: string) {
     const post = await this.findOne({
       id,

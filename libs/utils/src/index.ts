@@ -9,6 +9,7 @@ export function generateParseIntPipe(key: string) {
   });
 }
 export function error(res: Response, code: number, message: string) {
+  
   return res.status(code).json({ message: message });
 }
 

@@ -39,19 +39,19 @@ export class UserController {
    */
   @Post('user')
   @Header('content-type', 'application/json')
-  async user(@Body() user: CreateUserDto, @Res() res: Response) {
-    if (user?.phoneNumber) {
+  async user(@Body() createUserDto: CreateUserDto, @Res() res: Response) {
+  
       const existingUser = await this.userService.findOneByPhoneNumber(
-        user?.phoneNumber,
+        createUserDto.phoneNumber,
       );
 
       if (!existingUser) {
-        const res = this.userService.create(user);
+        const res = this.userService.create(createUserDto);
         return res;
       } else {
-        return error(res, 500, '已存在该用户！');
+        return existingUser;
       }
-    } else return error(res, 500, '缺少手机号！');
+   
   }
 
   /**
@@ -108,7 +108,6 @@ export class UserController {
 
   /**
    * 清空用户
-   * @param id 用户id
    * @returns 删除成功与否
    */
   @Delete('users')

@@ -19,31 +19,34 @@ export class AuthService {
   private logger = new Logger();
 
   async logInWithRegister(phoneNumber: string) {
-    const user = await this.userService.findOneByPhoneNumber(
-      phoneNumber);
+    const user = await this.userService.findOneByPhoneNumber(phoneNumber);
 
-    if (user) {
-      return user
+    if (!user) {
+      return await this.register(phoneNumber);
     }
-    const createdUser = await this.register(phoneNumber);
-
-    return createdUser
+    return this.generateAuthInfo(user);
   }
 
   async logIn(phoneNumber: string) {
-    const user = await this.userService.findOneByPhoneNumber(
-      phoneNumber);
-
-      console.log(user);
-      
+    const user = await this.userService.findOneByPhoneNumber(phoneNumber);
+    
     if (!user) {
       throw new UnauthorizedException('未查询到该用户');
     }
-    return user
+    return this.generateAuthInfo(user);
+  }
+
+  async logOut(phoneNumber: string) {
+    const user = await this.userService.findOneByPhoneNumber(phoneNumber);
+
+    if (!user) {
+      throw new UnauthorizedException('未查询到该用户');
+    }
+     this.generateAuthInfo(user,false);
   }
 
   async register(phoneNumber: string) {
-    const createdUser = await this.userService.create({phoneNumber});
+    const createdUser = await this.userService.create({ phoneNumber });
     if (!createdUser) {
       throw new UnauthorizedException('注册失败！');
     }
@@ -74,7 +77,7 @@ export class AuthService {
   async generateJwtTokens(userInfo: UsereModel, isRefresh: Boolean = false) {
     let payload;
     if (isRefresh) payload = { userId: userInfo.id };
-    else payload = { userId: userInfo.id, username: userInfo.profile.bio };
+    else payload = { userId: userInfo.id, createdAt: userInfo.createdAt };
 
     return this.jwtService.signAsync(payload);
   }

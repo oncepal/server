@@ -14,13 +14,15 @@ export class ResponseInterceptor implements NestInterceptor {
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
 
     const res = context.switchToHttp().getResponse<Response>();
+    
+
     const {method} = context.switchToHttp().getRequest<Request>()
     if([200,201,202].includes(res.statusCode))
     res.statusCode = 200
     else res.statusCode = 500
     
    return next.handle().pipe( map(data => {
-
+        
         const r = {
 
           data,

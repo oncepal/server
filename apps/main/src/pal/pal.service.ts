@@ -13,7 +13,6 @@ export class PalService {
   }
 
   async find(skip: number, limit: number, query?: Partial<Need>) {
-    console.log(query);
 
     const findQuery = this.needModel
       .find({
@@ -44,7 +43,6 @@ export class PalService {
   }
   async delete(id: string) {
     const deletedNeed =  await this.needModel.findByIdAndRemove(id)
-    console.log(deletedNeed);
     
     return {}
 
