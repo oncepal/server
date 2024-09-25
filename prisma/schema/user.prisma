@@ -28,7 +28,7 @@ model User {
   achievementIds String[]      @db.ObjectId
 
   likes       Like[]
-  needs       Need[]
+  demands       Demand[]
   chatroom    Chatroom[] @relation(fields: [chatroomIds], references: [id])
   chatroomIds String[]   @db.ObjectId
 

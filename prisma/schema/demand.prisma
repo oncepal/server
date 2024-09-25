@@ -4,20 +4,20 @@ type PalLimits {
   sex    Int?
 }
 
-type NeedPayment {
+type DemandPayment {
   way    PaymentMethod
   number Int?
 }
 
-model Need {
+model Demand {
   id          String       @id @default(auto()) @map("_id") @db.ObjectId
-  needer      User         @relation(fields: [neederId], references: [id])
-  neederId    String       @db.ObjectId
+  demander      User         @relation(fields: [demanderId], references: [id])
+  demanderId    String       @db.ObjectId
   description String?
   images      String[]
   keywords    String?
   location    String?
   limits      PalLimits?
-  payment     NeedPayment?
+  payment     DemandPayment?
   time        String?
 }

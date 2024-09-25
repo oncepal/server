@@ -1,4 +1,4 @@
-import { $Enums,Like, Prisma,Post, Achievement, Need } from '@prisma/client';
+import { $Enums,Like, Prisma,Post, Achievement, Demand } from '@prisma/client';
 import { Type } from 'class-transformer';
 import {
   IsString,

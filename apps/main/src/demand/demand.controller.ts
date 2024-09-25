@@ -14,18 +14,18 @@ import {
   Query,
   Inject,
 } from '@nestjs/common';
-import { PalService } from './pal.service';
+import { DemandService } from './demand.service';
 
-import { CreateNeedDto, UpdateNeedDto } from '@libs/dtos';
+import { CreateDemandDto, UpdateDemandDto } from '@libs/dtos';
 import { AuthGuard } from '@libs/guards';
 import { Public } from '@libs/decorators';
 import { generateParseIntPipe, generateSkip } from '@libs/utils';
 import { UserService } from '../user/user.service';
 
-@Controller('pal')
-export class PalController {
+@Controller()
+export class DemandController {
   @Inject()
-  private readonly palService: PalService;
+  private readonly palService: DemandService;
   @Inject()
   private readonly userService: UserService;
   /**
@@ -50,11 +50,11 @@ export class PalController {
 
   /**
    * @name 新建搭子需求
-   * @Body createNeedDto CreateNeedDto
+   * @Body createDemandDto CreateDemandDto
    */
-  @Post('need')
-  async createNeed(@Body() createNeedDto: CreateNeedDto) {
-    return this.palService.create(createNeedDto);
+  @Post('demand')
+  async createDemand(@Body() createDemandDto: CreateDemandDto) {
+    return this.palService.create(createDemandDto);
   }
 
   /**
@@ -67,8 +67,8 @@ export class PalController {
    * @returns 满足条件的需求列表
    */
   @Public()
-  @Get('needs')
-  async getNeeds(
+  @Get('demands')
+  async getDemands(
     @Query('page',  generateParseIntPipe('page')) page: number,
     @Query('pageSize',  generateParseIntPipe('pageSize')) pageSize: number,
     @Query('time') time: string,
@@ -91,8 +91,8 @@ export class PalController {
    * @param id 搭子需求id
    * @returns 用户详情对象
    */
-  @Get('need/:id')
-  async getNeed(@Param('id') id: string) {
+  @Get('demand/:id')
+  async getDemand(@Param('id') id: string) {
     return await this.palService.findOneById(id);
   }
 
@@ -101,9 +101,9 @@ export class PalController {
    * @body 搭子需求信息
    * @returns 修改后的搭子需求信息
    */
-  @Patch('need')
-  async updateNeed(@Body() need: UpdateNeedDto) {
-    const r = await this.palService.update(need);
+  @Patch('demand')
+  async updateDemand(@Body() demand: UpdateDemandDto) {
+    const r = await this.palService.update(demand);
     if (!r) throw new Error();
     return r;
   }
@@ -114,8 +114,8 @@ export class PalController {
    * @returns 删除成功与否
    */
 
-  @Delete('need/:id')
-  async deleteNeed(@Param('id') id: string) {
+  @Delete('demand/:id')
+  async deleteDemand(@Param('id') id: string) {
     const r = await this.palService.delete(id);
     return r;
   }

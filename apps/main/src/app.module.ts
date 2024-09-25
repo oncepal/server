@@ -6,16 +6,15 @@ import { CommonModule } from '@libs/common';
 import { ChatroomModule } from './chatroom/chatroom.module';
 import { PostModule } from './post/post.module';
 import { UserModule } from './user/user.module';
-import { PalModule } from './pal/pal.module';
+import { DemandModule } from './demand/demand.module';
 @Module({
   imports: [ 
     CommonModule,
-    PalModule,
+    DemandModule,
     AuthModule,
     ChatroomModule,
     PostModule,
     UserModule,
-   
   ],
 })
 export class AppModule implements NestModule {

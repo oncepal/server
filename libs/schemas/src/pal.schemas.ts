@@ -6,7 +6,7 @@ import mongoose, { HydratedDocument } from 'mongoose';
  * @param name 名字
  */
 export type Pal = { id: number; avatar: number; name: number };
-export type NeedDocument = HydratedDocument<Need>;
+export type DemandDocument = HydratedDocument<Demand>;
 
 @Schema({ timestamps: true })
 /**
@@ -24,14 +24,14 @@ export type NeedDocument = HydratedDocument<Need>;
 @Schema({
   timestamps: true,
   toJSON: {
-    transform: (doc: NeedDocument, ret) => {
+    transform: (doc: DemandDocument, ret) => {
       delete ret.__v;
       ret.id = ret._id;
       delete ret._id;
     },
   },
 })
-export class Need {
+export class Demand {
   @Prop()
   id: string;
   @Prop({ required: true, type: mongoose.Schema.Types.String })
@@ -58,4 +58,4 @@ export class Need {
   paymentMethod: number;
 }
 
-export const NeedSchema = SchemaFactory.createForClass(Need);
+export const DemandSchema = SchemaFactory.createForClass(Demand);

@@ -1,11 +1,11 @@
 import { IsString, IsNumber } from 'class-validator';
 import { OmitType, PartialType, IntersectionType } from '@nestjs/mapped-types'
-import { Need } from '@prisma/client';
+import { Demand } from '@prisma/client';
 
 
-export class UpdateNeedDto 
+export class UpdateDemandDto 
     {
 }
-export class CreateNeedDto {
+export class CreateDemandDto {
 }
 
