@@ -6,7 +6,9 @@ import { Demand, DemandSchema } from '@libs/schemas';
 import { UserModule } from '../user/user.module';
 
 @Module({
-  imports: [UserModule,MongooseModule.forFeature([{name: Demand.name, schema: DemandSchema }])],
+  // 使用 Mongoose
+  // imports: [MongooseModule.forFeature([{name: Demand.name, schema: DemandSchema }])],
+  imports: [UserModule],  
   providers: [DemandService],
   controllers: [DemandController],
   exports: [DemandService],

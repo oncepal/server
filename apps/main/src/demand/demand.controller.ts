@@ -15,19 +15,15 @@ import {
   Inject,
 } from '@nestjs/common';
 import { DemandService } from './demand.service';
-
-import { CreateDemandDto, UpdateDemandDto } from '@libs/dtos';
-import { AuthGuard } from '@libs/guards';
+import { CreateDemandDto, GetDemandsDto, UpdateDemandDto } from '@libs/dtos';
 import { Public } from '@libs/decorators';
-import { generateParseIntPipe, generateSkip } from '@libs/utils';
-import { UserService } from '../user/user.service';
+import { Demand as DemandModel } from '@prisma/client';
 
 @Controller()
 export class DemandController {
   @Inject()
-  private readonly palService: DemandService;
-  @Inject()
-  private readonly userService: UserService;
+  private readonly demandService: DemandService;
+
   /**
    * 开一个搭子盲盒
    * @param id 搭子需求id
@@ -54,36 +50,27 @@ export class DemandController {
    */
   @Post('demand')
   async createDemand(@Body() createDemandDto: CreateDemandDto) {
-    return this.palService.create(createDemandDto);
+    return this.demandService.create(createDemandDto);
   }
 
   /**
    * @name 查询匹配条件的搭子需求
-   * @query page 第几页
-   * @query pageSize 多少条
-   * @query time 时间筛选
-   * @query keyword 关键词筛选
-   * @query location 位置筛选
-   * @returns 满足条件的需求列表
+   * 查询匹配条件的搭子需求
+   * @query querys 查询条件
+   * @returns 满足条件的搭子需求列表
    */
   @Public()
   @Get('demands')
-  async getDemands(
-    @Query('page',  generateParseIntPipe('page')) page: number,
-    @Query('pageSize',  generateParseIntPipe('pageSize')) pageSize: number,
-    @Query('time') time: string,
-    @Query('location') location: string,
-    @Query('keyword') keyword: string,
-  ) {
+  async demands(@Query() querys: GetDemandsDto): Promise<DemandModel[]> {
+    const { skip, take, cursor, where, orderBy } = querys;
 
-    const query = {
-      keyword,
-      location,
-      time,
-    };
-    const skip =  generateSkip(page, pageSize);
-    const r = await this.palService.find(skip, pageSize, query);
-    return r;
+    return this.demandService.findMany({
+      skip,
+      take,
+      cursor,
+      where,
+      orderBy,
+    });
   }
 
   /**
@@ -93,7 +80,7 @@ export class DemandController {
    */
   @Get('demand/:id')
   async getDemand(@Param('id') id: string) {
-    return await this.palService.findOneById(id);
+    return await this.demandService.findOneById(id);
   }
 
   /**
@@ -102,8 +89,9 @@ export class DemandController {
    * @returns 修改后的搭子需求信息
    */
   @Patch('demand')
-  async updateDemand(@Body() demand: UpdateDemandDto) {
-    const r = await this.palService.update(demand);
+  async updateDemand(@Body() updateDemandDto: UpdateDemandDto) {
+    const { id, ...data } = updateDemandDto;
+    const r = await this.demandService.updateDemandById(id, data);
     if (!r) throw new Error();
     return r;
   }
@@ -116,7 +104,7 @@ export class DemandController {
 
   @Delete('demand/:id')
   async deleteDemand(@Param('id') id: string) {
-    const r = await this.palService.delete(id);
+    const r = await this.demandService.delete({ id });
     return r;
   }
 }
