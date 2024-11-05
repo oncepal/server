@@ -1,23 +1,25 @@
 # 概述
 
-ONCEPAL后端Monorepos(Nest.js + MongoDB replica set + Prisma ODM).
+ONCEPAL后端Monorepos(Nest.js + MongoDB replica set + Prisma ORM).
 
 # 功能
 - JWT 登录鉴权
-- CASL 权限控制集成
-- Data 分页排序过滤
+- Wechat 微信生态集成
+- CASL 基于字段的权限控制集成
+- Filter/Sort 分页排序过滤
 - Response Interceptor 统一返回结构
 - Exception Filters 异常过滤
 - Validation Pipes 参数管道控制
 - Docker Compose 部署集成
 - MongoDB Replica Set 副本集
 - Serializers 序列化
-- Helmet 头保护
+- Helmet 请求头保护
 - Throttler 限流
-- WebSocket 集成
+- WebSocket 实时通讯集成
 - CORS 跨域请求
-- Common 微服务架构扩展支持
+- Common 统一封装微服务架构扩展支持
 - Mongoose Schema 原生数据库操作支持
+- Prisma ORM集成数据库处理 
 
 # 环境要求
 - Nest.js 10
