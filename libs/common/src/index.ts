@@ -1,19 +1,20 @@
 import { NestFactory } from '@nestjs/core';
-import { ResponseInterceptor } from '@libs/interceptors';
-import { InvokeRecordInterceptor } from '@libs/interceptors';
+import { ResponseInterceptor, InvokeRecordInterceptor } from '@libs/interceptors';
 import helmet from 'helmet';
 import { HttpExceptionFilter } from '@libs/filters';
 import { ValidationPipe } from '@nestjs/common';
-import { MicroserviceOptions, Transport } from '@nestjs/microservices';
+import { Logger } from 'nestjs-pino';
+
 export const startCommonServer = (
-  module: any,port: 1996,
-  options= {
-    
-  },
+  module: any,
+  port : 1996,
+  options = {},
 ) => {
   async function starter() {
-    const {  } = options;
     const app = await NestFactory.create(module, { cors: true });
+    const {  } = options;
+    // 使用 nestjs-pino 日志记录器
+    app.useLogger(app.get(Logger));
 
     // 全局参数自动过滤
     app.useGlobalPipes(
@@ -30,6 +31,8 @@ export const startCommonServer = (
     app.useGlobalFilters(new HttpExceptionFilter());
     app.use(helmet());
     await app.listen(port);
+
+    console.log(`Server is running on http://localhost:${port}`);
   }
   starter();
 };

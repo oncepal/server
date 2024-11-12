@@ -7,14 +7,31 @@ import { ChatroomModule } from './chatroom/chatroom.module';
 import { PostModule } from './post/post.module';
 import { UserModule } from './user/user.module';
 import { DemandModule } from './demand/demand.module';
+import { LoggerModule } from 'nestjs-pino';
+
+const isDev = process.env.NODE_ENV !== 'production';
+
 @Module({
-  imports: [ 
+  imports: [
     CommonModule,
     DemandModule,
     AuthModule,
     ChatroomModule,
     PostModule,
     UserModule,
+    LoggerModule.forRoot({
+      pinoHttp: {
+        level: isDev ? 'debug' : 'info',
+        transport: isDev
+          ? {
+            target: 'pino-pretty',
+            options: {
+              colorize: true,
+            },
+          }
+          : undefined,
+      },
+    })
   ],
 })
 export class AppModule implements NestModule {
