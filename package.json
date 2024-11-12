@@ -9,7 +9,7 @@
     "build": "nest build",
     "format": "prettier --write \"apps/**/*.ts\" \"libs/**/*.ts\"",
     "start": "nest start",
-    "dev": "nest start --watch",
+    "dev": "ts-node -r tsconfig-paths/register apps/main/src/main.ts",
     "dev:chatroom": "nest start --watch chatroom",
     "db:pull": "prisma db pull",
     "db:push": "prisma db push",
