@@ -40,18 +40,25 @@ export class UserController {
   @Post('user')
   @Header('content-type', 'application/json')
   async user(@Body() createUserDto: CreateUserDto, @Res() res: Response) {
-  
-      const existingUser = await this.userService.findOneByPhoneNumber(
-        createUserDto.phoneNumber,
-      );
+    const existingUser = await this.userService.findOneByPhoneNumber(
+      createUserDto.phoneNumber,
+    );
 
-      if (!existingUser) {
-        const res = this.userService.create(createUserDto);
-        return res;
-      } else {
-        return existingUser;
-      }
-   
+    if (!existingUser) {
+      const newUser = await this.userService.create(createUserDto);
+      
+      res.status(200).send({
+        data: {_id:newUser.id,createdAt:newUser.createdAt,updatedAt:newUser.createdAt,__v:newUser.views},
+        code: 200,
+        message: '用户创建成功',
+      });
+    } else {
+      res.status(200).send({
+        data:{_id:existingUser.id,createdAt:existingUser.createdAt,updatedAt:existingUser.createdAt,__v:existingUser.views} ,
+        code: 200,
+        message: '用户已存在',
+      });
+    }
   }
 
   /**

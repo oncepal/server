@@ -7,10 +7,14 @@ export class UserService {
   @Inject(PrismaService)
   private prismaService: PrismaService;
 
+
   async create(user: Prisma.UserUncheckedCreateInput): Promise<User> {
-    const createUser = await this.prismaService.user.create({ data: user });
-    
-    return createUser;
+    try {
+      const createUser = await this.prismaService.user.create({ data: user });
+      return createUser;
+    } catch (error) {
+      throw new Error(`创建用户失败: ${error.message}`);
+    }
   }
 
   async findMany(params: {
