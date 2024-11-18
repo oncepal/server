@@ -1,28 +1,26 @@
-import { IsString, IsNumber, IsNotEmpty, Length } from 'class-validator';
+import { ApiProperty } from '@nestjs/swagger';
+
 export class LogInDto {
-    @Length(11,11,{
-        message: 'phoneNumber必须是11位！'
-    })
-    @IsString({
-        message: 'phoneNumber必须是字符串！'
-    })
-    phoneNumber:string
-}
-export class LogOutDto extends LogInDto{
-   
-}
-export class RegisterDto extends LogInDto{
-  
+  @ApiProperty({ description: '手机号' })
+  phoneNumber: string;
 }
 
-export class GetCaptchaDto extends LogInDto{
-  
+export class LogOutDto {
+  @ApiProperty({ description: '手机号' })
+  phoneNumber: string;
+}
+
+export class RegisterDto {
+  @ApiProperty({ description: '手机号' })
+  phoneNumber: string;
+}
+
+export class GetCaptchaDto {
+  @ApiProperty({ description: '手机号' })
+  phoneNumber: string;
 }
 
 export class RefreshDto {
-
-    @IsString({
-        message: 'Refresh不能为空！'
-    })
-    refreshToken:string
+  @ApiProperty({ description: '刷新 token' })
+  refreshToken: string;
 }

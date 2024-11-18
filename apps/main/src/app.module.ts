@@ -1,6 +1,7 @@
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { CustomMiddleware } from '@libs/middlewares';
 import { AuthModule } from './auth/auth.module';
+import { SwaggerModule } from '@nestjs/swagger';
 
 import { CommonModule } from '@libs/common';
 import { ChatroomModule } from './chatroom/chatroom.module';
@@ -31,7 +32,8 @@ const isDev = process.env.NODE_ENV !== 'production';
           }
           : undefined,
       },
-    })
+    }),
+    SwaggerModule,
   ],
 })
 export class AppModule implements NestModule {
