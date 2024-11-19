@@ -15,6 +15,7 @@ async function bootstrap() {
     .setDescription('API 描述')
     .setVersion('1.0')
     .addTag('api')
+    .addServer('/api-json')
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
