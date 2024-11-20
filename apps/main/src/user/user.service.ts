@@ -1,12 +1,17 @@
 import { BadRequestException, Inject, Injectable } from '@nestjs/common';
 import { PrismaService } from '@libs/prisma';
 import { $Enums, Prisma, User } from '@prisma/client';
+import { CaslAbilityFactory } from '@libs/casl/casl.factory';
+import { Action, Role } from '@libs/constants';
+import { AppSubjects } from '@libs/casl/casl.factory';
 
 @Injectable()
 export class UserService {
   @Inject(PrismaService)
   private prismaService: PrismaService;
 
+  @Inject(CaslAbilityFactory)
+  private caslAbilityFactory: CaslAbilityFactory;
 
   async create(user: Prisma.UserUncheckedCreateInput): Promise<User> {
     try {
@@ -88,5 +93,17 @@ export class UserService {
 
   async deleteAll() {
     return await this.prismaService.user.deleteMany();
+  }
+
+  async checkPermission(userId: string, action: Action, subject: AppSubjects) {
+    const user = await this.findOneById(userId);
+    if (!user) {
+      throw new BadRequestException('用户不存在');
+    }
+
+    const ability = await this.caslAbilityFactory.createAbilityForUser(user);
+    if (ability.cannot(action, subject)) {
+      throw new BadRequestException('权限不足');
+    }
   }
 }

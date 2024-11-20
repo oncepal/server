@@ -12,7 +12,7 @@ import { Injectable } from '@nestjs/common';
 
 import { Post } from '@prisma/client';
 const { MANAGE, UPDATE, DELETE, CREATE, READ } = Action;
-const { ADMIM, USER } = Role;
+const { ADMIN, USER } = Role;
 
 type ExtendedSubjects = 'all';
 export type AppSubjects = PrismaSubjects | ExtendedSubjects;
@@ -25,7 +25,7 @@ export class CaslAbilityFactory {
       createPrismaAbility,
     );
 
-    if (user.roles.includes(ADMIM)) {
+    if (user.roles.includes(ADMIN)) {
       can(MANAGE, 'all');
     } else {
       if (user.roles.includes(USER)) {

@@ -15,7 +15,7 @@ model User {
   profile     Profile?
   status      UserStatus @default(OPEN)
   isSuperPal  Boolean    @default(false)
-  roles       Role[]     @default([USER])
+  userRoles   UserRoleRelation[]
   views       Int        @default(0)
   orders      Order[]
   posts       Post[]
