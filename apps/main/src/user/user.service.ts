@@ -1,7 +1,7 @@
 import { BadRequestException, Inject, Injectable } from '@nestjs/common';
 import { PrismaService } from '@libs/prisma';
 import { $Enums, Prisma, User } from '@prisma/client';
-import { CaslAbilityFactory } from '@libs/casl/casl.factory';
+import { CaslAbilityFactory, ExtractSubjectType } from '@libs/casl/casl.factory';
 import { Action, Role } from '@libs/constants';
 import { AppSubjects } from '@libs/casl/casl.factory';
 
@@ -101,8 +101,12 @@ export class UserService {
       throw new BadRequestException('用户不存在');
     }
 
-    const ability = await this.caslAbilityFactory.createAbilityForUser(user);
-    if (ability.cannot(action, subject)) {
+    const permissions = [
+      { action, subject: subject as ExtractSubjectType<AppSubjects> },
+    ];
+
+    const ability = await this.caslAbilityFactory.createAbilityForUser(user, permissions);
+    if (ability.cannot(action, subject as ExtractSubjectType<AppSubjects>)) {
       throw new BadRequestException('权限不足');
     }
   }

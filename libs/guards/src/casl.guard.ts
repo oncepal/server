@@ -1,4 +1,4 @@
-import { AppAbility, CaslAbilityFactory } from '@libs/casl';
+import { AppAbility, CaslAbilityFactory, AppSubjects, ExtractSubjectType } from '@libs/casl';
 import { Action, CHECK_POLICIES_KEY } from '@libs/constants';
 import {
   CanActivate,
@@ -50,11 +50,23 @@ export class PoliciesGuard implements CanActivate {
       ) || [];
 
     const { user } = context.switchToHttp().getRequest();
-    const ability = await this.caslAbilityFactory.createAbilityForUser(user);
+    const permissions = this.getPermissionsForUser(user); // 假设有一个方法来获取用户的权限
+    const ability = await this.caslAbilityFactory.createAbilityForUser(user, permissions);
 
     return policyHandlers.every((handler) =>
       this.execPolicyHandler(handler, ability),
     );
+  }
+
+  private getPermissionsForUser(user: any): { action: Action, subject: ExtractSubjectType<AppSubjects> }[] {
+    // 这里需要实现一个方法来获取用户的权限
+    // 例如，从数据库或其他服务中获取
+    return [
+      { action: Action.READ, subject: 'Post' as ExtractSubjectType<AppSubjects> },
+      { action: Action.CREATE, subject: 'Post' as ExtractSubjectType<AppSubjects> },
+      { action: Action.UPDATE, subject: 'Post' as ExtractSubjectType<AppSubjects> },
+      { action: Action.DELETE, subject: 'Post' as ExtractSubjectType<AppSubjects> },
+    ];
   }
 
   private execPolicyHandler(handler: PolicyHandler, ability: AppAbility) {

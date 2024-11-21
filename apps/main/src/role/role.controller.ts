@@ -40,7 +40,7 @@ export class RoleController {
     return this.roleService.findMany({
       skip,
       take,
-      cursor,
+      cursor: cursor ? { id: cursor } : undefined, // 确保 cursor 类型与 RoleWhereUniqueInput 匹配
       where,
       orderBy,
     });

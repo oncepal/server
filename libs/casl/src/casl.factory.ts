@@ -33,3 +33,5 @@ export class CaslAbilityFactory {
     return build();
   }
 }
+
+export { ExtractSubjectType };
