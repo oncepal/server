@@ -9,7 +9,7 @@ import { PostModule } from './post/post.module';
 import { UserModule } from './user/user.module';
 import { DemandModule } from './demand/demand.module';
 import { LoggerModule } from 'nestjs-pino';
-import { RoleModule } from './role/role.module';
+import { RolesModule } from './roles/roles.module';
 
 const isDev = process.env.NODE_ENV !== 'production';
 
@@ -35,7 +35,8 @@ const isDev = process.env.NODE_ENV !== 'production';
       },
     }),
     SwaggerModule,
-    RoleModule,
+    RolesModule,
+    RolesModule,
   ],
 })
 export class AppModule implements NestModule {

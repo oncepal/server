@@ -33,7 +33,7 @@ enum UserStatus {
   EXPIRED   @map("expired") // 过期
 }
 
-enum UserRole {
+enum Role {
   ADMIN @map("admin") // 管理员
   USER  @map("user") // 普通用户
 }
