@@ -1,4 +1,4 @@
-import { CreateRoleDto, UpdateRoleDto } from '@libs/dtos/roles.dto';
+import { CreateRoleDto, UpdateRoleDto } from '@libs/dtos/roles.dtos';
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'libs/prisma/src/prisma.service'; // 导入 PrismaService
 
