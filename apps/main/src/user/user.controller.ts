@@ -66,7 +66,6 @@ export class UserController {
    * @query querys 查询条件
    * @returns 满足条件的用户列表
    */
-  @Public()
   @Get('users')
   async users(@Query() querys: GetUsersDto): Promise<UserModel[]> {
     const { skip, take, cursor, where, orderBy } = querys;
