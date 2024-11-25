@@ -10,7 +10,6 @@ export class RolesController {
   constructor(private readonly rolesService: RolesService) {}
 
   @Post()
-  @Public()
   @ApiOperation({ summary: '创建角色' })
   @ApiResponse({ status: 201, description: '角色已创建' })
   create(@Body() createRoleDto: CreateRoleDto) {

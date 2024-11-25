@@ -1,9 +1,6 @@
-import { IsString, IsOptional, IsInt } from 'class-validator';
+import { IsString, IsOptional } from 'class-validator';
 
 export class CreateMenuDto {
-  @IsString()
-  id: string;
-  
   @IsString()
   name: string;
 
@@ -14,15 +11,17 @@ export class CreateMenuDto {
   @IsString()
   parentId: string;
 }
+
 export class UpdateMenuDto {
-  @IsOptional()
   @IsString()
-  name?: string;
+  id: string;
 
-  @IsOptional()
   @IsString()
-  url?: string;
+  name: string;
 
+  @IsString()
+  url: string;
+  
   @IsOptional()
   @IsString()
   parentId: string;
