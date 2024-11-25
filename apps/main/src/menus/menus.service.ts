@@ -1,25 +1,28 @@
-import { CreateMenuDto, UpdateMenuDto } from '@libs/dtos/menus.dtos';
 import { Injectable } from '@nestjs/common';
+import { PrismaService } from 'libs/prisma/src/prisma.service';
+import { CreateMenuDto, UpdateMenuDto } from 'libs/dtos/src/menus.dtos';
 
 @Injectable()
 export class MenusService {
-  create(createMenuDto: CreateMenuDto) {
-    return 'This action adds a new menu';
+  constructor(private prisma: PrismaService) {}
+
+  async findAll() {
+    return this.prisma.menu.findMany();
   }
 
-  findAll() {
-    return `This action returns all menus`;
+  async findOne(id: string) {
+    return this.prisma.menu.findUnique({ where: { id } });
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} menu`;
+  async create(createMenuDto: CreateMenuDto) {
+    return this.prisma.menu.create({ data: createMenuDto });
   }
 
-  update(id: number, updateMenuDto: UpdateMenuDto) {
-    return `This action updates a #${id} menu`;
+  async update(id: string, updateMenuDto: UpdateMenuDto) {
+    return this.prisma.menu.update({ where: { id }, data: updateMenuDto });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} menu`;
+  async delete(id: string) {
+    return this.prisma.menu.delete({ where: { id } });
   }
 }

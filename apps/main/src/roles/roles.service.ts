@@ -7,30 +7,30 @@ export class RolesService {
   constructor(private prisma: PrismaService) {} // 注入 PrismaService
 
   async create(createRoleDto: CreateRoleDto) {
-    return this.prisma.role.create({
+    return this.prisma.roles.create({
       data: createRoleDto,
     });
   }
 
   async findAll() {
-    return this.prisma.role.findMany();
+    return this.prisma.roles.findMany();
   }
 
   async findOne(id: string) {
-    return this.prisma.role.findUnique({
+    return this.prisma.roles.findUnique({
       where: { id },
     });
   }
 
   async update(id: string, updateRoleDto: UpdateRoleDto) {
-    return this.prisma.role.update({
+    return this.prisma.roles.update({
       where: { id },
       data: updateRoleDto,
     });
   }
 
   async remove(id: string) {
-    return this.prisma.role.delete({
+    return this.prisma.roles.delete({
       where: { id },
     });
   }
