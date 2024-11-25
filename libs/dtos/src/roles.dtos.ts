@@ -8,13 +8,6 @@ export class CreateRoleDto {
 
   @IsString()
   name: string;
-
-  @IsOptional()
-  permissions?: RolePermission[];
-
-  @IsOptional()
-  users?: UserRoleRelation[];
-
   @IsDate()
   @IsOptional()
   createdAt?: Date;
