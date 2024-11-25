@@ -2,14 +2,14 @@ import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { CustomMiddleware } from '@libs/middlewares';
 import { AuthModule } from './auth/auth.module';
 import { SwaggerModule } from '@nestjs/swagger';
-
+import { LoggerModule } from 'nestjs-pino';
 import { CommonModule } from '@libs/common';
 import { ChatroomModule } from './chatroom/chatroom.module';
 import { PostModule } from './post/post.module';
 import { UserModule } from './user/user.module';
 import { DemandModule } from './demand/demand.module';
-import { LoggerModule } from 'nestjs-pino';
 import { RolesModule } from './roles/roles.module';
+import { MenusModule } from './menus/menus.module';
 
 const isDev = process.env.NODE_ENV !== 'production';
 
@@ -37,6 +37,7 @@ const isDev = process.env.NODE_ENV !== 'production';
     SwaggerModule,
     RolesModule,
     RolesModule,
+    MenusModule,
   ],
 })
 export class AppModule implements NestModule {
