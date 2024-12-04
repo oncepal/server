@@ -9,14 +9,14 @@
     "build": "nest build",
     "format": "prettier --write \"apps/**/*.ts\" \"libs/**/*.ts\"",
     "start": "nest start",
-    "dev": "nest start --watch",
+    "dev": "ts-node -r tsconfig-paths/register apps/main/src/main.ts",
     "dev:chatroom": "nest start --watch chatroom",
     "db:pull": "prisma db pull",
     "db:push": "prisma db push",
     "db:studio": "prisma studio",
     "db:generate": "prisma generate . @casl/prisma",
     "docker:up": "docker-compose up -d",
-    "mongosh":"docker exec -it mongodb bash",
+    "mongosh": "docker exec -it mongodb bash",
     "debug:main": "nest start --debug --watch",
     "start:prod": "node dist/apps/main/main",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
@@ -38,6 +38,7 @@
     "@nestjs/mongoose": "^10.0.1",
     "@nestjs/platform-express": "^10.0.0",
     "@nestjs/platform-socket.io": "^10.4.1",
+    "@nestjs/swagger": "^8.0.7",
     "@nestjs/throttler": "^6.1.0",
     "@nestjs/websockets": "^10.4.1",
     "@prisma/client": "^5.19.0",
@@ -46,6 +47,9 @@
     "helmet": "^7.1.0",
     "ioredis": "^5.4.1",
     "mongoose": "^7.6.3",
+    "nestjs-pino": "^4.1.0",
+    "pino-http": "^10.3.0",
+    "pino-pretty": "^13.0.0",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.8.1",
     "socket.io": "^4.7.5"
@@ -107,7 +111,7 @@
       "^@libs/redis(|/.*)$": "<rootDir>/libs/redis/src/$1",
       "^@libs/casl(|/.*)$": "<rootDir>/libs/casl/src/$1",
       "^@libs/common(|/.*)$": "<rootDir>/libs/common/src/$1",
-            "^@libs/schemas(|/.*)$": "<rootDir>/libs/schemas/src/$1"
+      "^@libs/schemas(|/.*)$": "<rootDir>/libs/schemas/src/$1"
     }
   },
   "engines": {

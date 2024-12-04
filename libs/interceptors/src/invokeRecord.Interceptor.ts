@@ -18,13 +18,13 @@ export class InvokeRecordInterceptor implements NestInterceptor {
 
     const { ip, method, path } = request;
 
-    this.logger.fatal(
-      `接口 ${method} ${path} 被 ${ip} ${userAgent}: 调用了，这个接口在 ${
-        context.getClass().name
-      } 的 ${
-        context.getHandler().name
-      } 方法`,
-    ); 
+    // this.logger.fatal(
+    //   `接口 ${method} ${path} 被 ${ip} ${userAgent}: 调用了，这个接口在 ${
+    //     context.getClass().name
+    //   } 的 ${
+    //     context.getHandler().name
+    //   } 方法`,
+    // ); 
   
     const now = Date.now();
  

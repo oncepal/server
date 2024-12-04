@@ -1,19 +1,20 @@
 services:
-  # oncepal-main:
-  #   container_name: oncepal-main
-  #   depends_on:
-  #     - mongo0
-  #     - redis
-  #   build:
-  #     context: ./docker/nest
-  #     args:
-  #         - APP=main
-  #   restart: always
-  #   ports:
-  #     - 19960:1996
-  #   networks:
-  #     - oncepal-network
-
+  oncepal-main:
+    container_name: oncepal-main
+    depends_on:
+      - mongo0
+      - redis
+    build:
+      context: ./
+      dockerfile: ./Dockerfile
+      args:
+          - APP=main
+    restart: always
+    ports:
+      - 19960:1996
+    networks:
+      - oncepal-network
+           
   # oncepal-user:
   #   container_name: oncepal-user
   #   depends_on:

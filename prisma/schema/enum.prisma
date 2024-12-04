@@ -19,11 +19,6 @@ enum PaymentStatus {
   UNCLEARED @map("uncleared") // 未支付
 }
 
-enum Role {
-  ADMIN @map("admin") // 管理员
-  USER  @map("user") // 用户
-}
-
 enum Gender {
   Male   @map("male") // 男
   Female @map("female") // 女
@@ -36,4 +31,9 @@ enum UserStatus {
   VIOLATION @map("violation") // 违规
   BLOCKED   @map("blocked") // 封禁
   EXPIRED   @map("expired") // 过期
+}
+
+enum Role {
+  ADMIN @map("admin") // 管理员
+  USER  @map("user") // 普通用户
 }

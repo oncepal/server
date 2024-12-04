@@ -12,30 +12,26 @@ import { Injectable } from '@nestjs/common';
 
 import { Post } from '@prisma/client';
 const { MANAGE, UPDATE, DELETE, CREATE, READ } = Action;
-const { ADMIM, USER } = Role;
+const { ADMIN, USER } = Role;
 
 type ExtendedSubjects = 'all';
 export type AppSubjects = PrismaSubjects | ExtendedSubjects;
-export type AppAbility = PureAbility<[Action, AppSubjects], PrismaQuery>;
+export type AppAbility = PureAbility<[Action, ExtractSubjectType<AppSubjects>], PrismaQuery>;
 
 @Injectable()
 export class CaslAbilityFactory {
-  async createAbilityForUser(user: any & { roles: Role[] }) {
+  async createAbilityForUser(user: any & { roles: Role[] }, permissions: { action: Action, subject: ExtractSubjectType<AppSubjects> }[]) {
     const { can, build, cannot } = new AbilityBuilder<AppAbility>(
       createPrismaAbility,
     );
 
-    if (user.roles.includes(ADMIM)) {
-      can(MANAGE, 'all');
-    } else {
-      if (user.roles.includes(USER)) {
-        can(MANAGE, 'all');
-        cannot(DELETE, 'Post');
-        cannot(DELETE, 'User');
-        cannot(DELETE, 'Chatroom');
-      }
-    }
+    // 动态分配权限
+    permissions.forEach(({ action, subject }) => {
+      can(action, subject);
+    });
 
     return build();
   }
 }
+
+export { ExtractSubjectType };

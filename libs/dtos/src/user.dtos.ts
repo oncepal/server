@@ -1,4 +1,4 @@
-import { $Enums,Like, Prisma,Post, Achievement, Demand } from '@prisma/client';
+import { $Enums,Like, Prisma,Post, Achievement, Demand,Roles } from '@prisma/client';
 import { Type } from 'class-transformer';
 import {
   IsString,
@@ -25,7 +25,7 @@ export class CreateUserDto {
   profile?:  Prisma.ProfileCreateInput
   status?: $Enums.UserStatus
   isSuperPal?: boolean
-  roles?: $Enums.Role[]
+  roles?: string
   views?: number
   achievementIds?:  string[]
   chatroomIds?:  string[]
