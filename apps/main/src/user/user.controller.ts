@@ -30,6 +30,7 @@ import {
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 
 @ApiTags('用户')
+
 @Controller()
 export class UserController {
   constructor(private readonly userService: UserService) {}
@@ -76,7 +77,6 @@ export class UserController {
   @ApiResponse({ status: 200, description: '查询成功' })
   async users(@Query() querys: GetUsersDto): Promise<UserModel[]> {
     const { skip, take, cursor, where, orderBy } = querys;
-
     return this.userService.findMany({
       skip,
       take,
