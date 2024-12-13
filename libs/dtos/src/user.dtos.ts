@@ -25,7 +25,7 @@ export class CreateUserDto {
   profile?:  Prisma.ProfileCreateInput
   status?: $Enums.UserStatus
   isSuperPal?: boolean
-  roles?: string
+  roles?: string[]
   views?: number
   achievementIds?:  string[]
   chatroomIds?:  string[]

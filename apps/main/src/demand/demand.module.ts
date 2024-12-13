@@ -7,8 +7,8 @@ import { UserModule } from '../user/user.module';
 
 @Module({
   // 使用 Mongoose
-  // imports: [MongooseModule.forFeature([{name: Demand.name, schema: DemandSchema }])],
-  imports: [UserModule],  
+  imports: [UserModule,MongooseModule.forFeature([{name: Demand.name, schema: DemandSchema }])],
+  // imports: [UserModule],  
   providers: [DemandService],
   controllers: [DemandController],
   exports: [DemandService],

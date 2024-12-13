@@ -1,1 +1,1 @@
-export * from './pal.schemas'
+export * from './demand.schemas'

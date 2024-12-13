@@ -13,7 +13,8 @@
     ],
     "webpack": true,
     "webpackConfigPath": "webpack.config.js",
-    "tsConfigPath": "apps/main/tsconfig.app.json"
+    "tsConfigPath": "apps/main/tsconfig.app.json",
+    "plugins": ["@nestjs/swagger"]
   },
   "monorepo": true,
   "root": "apps/main",

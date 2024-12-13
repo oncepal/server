@@ -15,7 +15,7 @@
     "db:push": "prisma db push",
     "db:studio": "prisma studio",
     "db:generate": "prisma generate . @casl/prisma",
-    "docker:up": "docker-compose up -d",
+    "docker": "docker-compose up -d",
     "mongosh": "docker exec -it mongodb bash",
     "debug:main": "nest start --debug --watch",
     "start:prod": "node dist/apps/main/main",

@@ -15,6 +15,7 @@ export const startCommonServer = (
   async function starter() {
     const app = await NestFactory.create(module, { cors: true });
     const { } = options;
+
     // 创建 Swagger 文档
     const config = new DocumentBuilder()
       .setTitle('API 文档')
@@ -23,7 +24,13 @@ export const startCommonServer = (
       .addTag('api')
       .addServer('/api-json')
       .build();
-    const document = SwaggerModule.createDocument(app, config);
+      
+    const document = SwaggerModule.createDocument(app, config,{
+      operationIdFactory: (
+        controllerKey: string,
+        methodKey: string
+      ) => methodKey
+    });
     SwaggerModule.setup('api', app, document);
    
     // 使用 nestjs-pino 日志记录器

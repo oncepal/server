@@ -13,6 +13,8 @@ export class RolesService {
   }
 
   async findAll() {
+    console.log(124124);
+    
     return this.prisma.roles.findMany();
   }
 

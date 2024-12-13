@@ -27,10 +27,9 @@ import {
   CheckPolicies,
   DeleteUserPolicyHandler,
 } from '@libs/guards';
-import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiResponse, ApiParam } from '@nestjs/swagger';
 
-@ApiTags('用户')
-
+@ApiTags('user')
 @Controller()
 export class UserController {
   constructor(private readonly userService: UserService) {}
@@ -76,6 +75,8 @@ export class UserController {
   @ApiOperation({ summary: '查询用户列表' })
   @ApiResponse({ status: 200, description: '查询成功' })
   async users(@Query() querys: GetUsersDto): Promise<UserModel[]> {
+    console.log(querys);
+    
     const { skip, take, cursor, where, orderBy } = querys;
     return this.userService.findMany({
       skip,

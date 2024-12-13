@@ -36,7 +36,6 @@ export class AuthController {
   @ApiOperation({ summary: '用户登录并注册' })
   @ApiResponse({ status: 200, description: '登录并注册成功', type: LogInDto })
   logInWithRegister(@Body() logInDto: LogInDto) {
-    // console.log(logInDto);
 
     return this.authService.logInWithRegister(logInDto.phoneNumber);
   }

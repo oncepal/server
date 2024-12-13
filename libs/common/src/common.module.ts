@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { CommonService } from './common.service';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ThrottlerModule } from '@nestjs/throttler';
-// import { MongooseModule } from '@nestjs/mongoose';
+import { MongooseModule } from '@nestjs/mongoose';
 import { PrismaModule } from '@libs/prisma';
 import { CaslModule } from '@libs/casl';
 @Module({
@@ -13,14 +13,13 @@ import { CaslModule } from '@libs/casl';
       isGlobal: true,
       envFilePath: '.env', 
     }),
-    // 使用 Mongoose
-    // MongooseModule.forRootAsync({
-    //   imports: [ConfigModule],
-    //   useFactory: async (configService: ConfigService) => ({
-    //     uri: configService.get<string>('MONGODB_URI'),
-    //   }),
-    //   inject: [ConfigService],
-    // }),
+    MongooseModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: async (configService: ConfigService) => ({
+        uri: configService.get<string>('MONGODB_URI'),
+      }),
+      inject: [ConfigService],
+    }),
     ThrottlerModule.forRoot([{
       ttl: 60000,
       limit: 10,
