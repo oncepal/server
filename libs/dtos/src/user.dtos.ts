@@ -1,4 +1,5 @@
-import { $Enums,Like, Prisma,Post, Achievement, Demand,Roles } from '@prisma/client';
+import { ApiExtraModels } from '@nestjs/swagger';
+import { $Enums,Like, Prisma,Post, Achievement, Demand,Role } from '@prisma/client';
 import { Type } from 'class-transformer';
 import {
   IsString,
@@ -8,6 +9,10 @@ import {
   Length,
   IsNumberString,
 } from 'class-validator';
+import { UserDto } from 'prisma/dto';
+
+
+
 export class GetUsersDto {
 
   skip: number = 0;
@@ -19,8 +24,9 @@ export class GetUsersDto {
   orderBy?: Prisma.UserOrderByWithRelationInput;
 
 }
-export class CreateUserDto {
 
+export class CreateUserDto {
+  @IsString()
   phoneNumber: string
   profile?:  Prisma.ProfileCreateInput
   status?: $Enums.UserStatus

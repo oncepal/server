@@ -5,6 +5,7 @@ import { HttpExceptionFilter } from '@libs/filters';
 import { ValidationPipe } from '@nestjs/common';
 import { Logger } from 'nestjs-pino';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import * as PrismaModel from "prisma/dto"
 
 
 export const startCommonServer = (
@@ -29,7 +30,8 @@ export const startCommonServer = (
       operationIdFactory: (
         controllerKey: string,
         methodKey: string
-      ) => methodKey
+      ) => methodKey,
+     extraModels:Object.values(PrismaModel)
     });
     SwaggerModule.setup('api', app, document);
    

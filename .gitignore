@@ -1,7 +1,8 @@
 # compiled output
 /dist
 /node_modules
-
+/prisma/dto
+/prisma/*.svg
 # Logs
 logs
 *.log

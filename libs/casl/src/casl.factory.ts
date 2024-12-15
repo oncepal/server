@@ -4,7 +4,7 @@ import {
   ExtractSubjectType,
   PureAbility,
 } from '@casl/ability';
-import { Action, Role } from '@libs/constants';
+import { Action, ROLE } from '@libs/constants';
 
 import { PrismaQuery, createPrismaAbility } from './casl.prisma';
 import { PrismaSubjects } from './casl.subjects';
@@ -12,7 +12,7 @@ import { Injectable } from '@nestjs/common';
 
 import { Post } from '@prisma/client';
 const { MANAGE, UPDATE, DELETE, CREATE, READ } = Action;
-const { ADMIN, USER } = Role;
+const { ADMIN, USER } = ROLE;
 
 type ExtendedSubjects = 'all';
 export type AppSubjects = PrismaSubjects | ExtendedSubjects;
@@ -20,7 +20,7 @@ export type AppAbility = PureAbility<[Action, ExtractSubjectType<AppSubjects>], 
 
 @Injectable()
 export class CaslAbilityFactory {
-  async createAbilityForUser(user: any & { roles: Role[] }, permissions: { action: Action, subject: ExtractSubjectType<AppSubjects> }[]) {
+  async createAbilityForUser(user: any & { roles: ROLE[] }, permissions: { action: Action, subject: ExtractSubjectType<AppSubjects> }[]) {
     const { can, build, cannot } = new AbilityBuilder<AppAbility>(
       createPrismaAbility,
     );

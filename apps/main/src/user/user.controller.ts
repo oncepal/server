@@ -19,16 +19,27 @@ import {
 import { UserService } from './user.service';
 import { Prisma, User as UserModel } from '@prisma/client';
 import { Response } from 'express';
-import { error, generateParseIntPipe, generateSkip } from '@libs/utils';
+import { IntersectionType } from '@nestjs/swagger';
 import { Public } from '@libs/decorators';
-import { CreateUserDto, GetUsersDto, UpdateUserDto } from '@libs/dtos';
+import { UpdateUserDto,PaginationDto } from '@libs/dtos';
 import {
   PoliciesGuard,
   CheckPolicies,
   DeleteUserPolicyHandler,
 } from '@libs/guards';
-import { ApiTags, ApiOperation, ApiResponse, ApiParam } from '@nestjs/swagger';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiResponse,
+  ApiParam,
+  ApiBearerAuth,
+  ApiQuery,
+  ApiBody,
+} from '@nestjs/swagger';
+import { CreateUserDto,UserDto } from 'prisma/dto';
 
+
+// class GetUserDto extends IntersectionType(UserDto, PaginationDto) {}
 @ApiTags('user')
 @Controller()
 export class UserController {
@@ -42,24 +53,24 @@ export class UserController {
   @Post('user')
   @Header('content-type', 'application/json')
   @ApiOperation({ summary: '创建用户' })
-  @ApiResponse({ status: 200, description: '用户创建成功' })
+  @ApiResponse({ status: 200, description: '用户创建成功', type: UserDto  })
   @ApiResponse({ status: 400, description: '用户信息不完整' })
-  async user(@Body() createUserDto: CreateUserDto, @Res() res: Response) {
+  async createUser(@Body() createUserDto: CreateUserDto, @Res() res: Response) {
     const existingUser = await this.userService.findOneByPhoneNumber(
       createUserDto.phoneNumber,
     );
 
     if (!existingUser) {
       const newUser = await this.userService.create(createUserDto);
-      
+
       res.status(200).send({
-        data: {_id:newUser.id,createdAt:newUser.createdAt,updatedAt:newUser.createdAt,__v:newUser.views},
+        data: newUser,
         code: 200,
         message: '用户创建成功',
       });
     } else {
       res.status(200).send({
-        data:{_id:existingUser.id,createdAt:existingUser.createdAt,updatedAt:existingUser.createdAt,__v:existingUser.views} ,
+        data: existingUser,
         code: 200,
         message: '用户已存在',
       });
@@ -73,17 +84,15 @@ export class UserController {
    */
   @Get('users')
   @ApiOperation({ summary: '查询用户列表' })
-  @ApiResponse({ status: 200, description: '查询成功' })
-  async users(@Query() querys: GetUsersDto): Promise<UserModel[]> {
-    console.log(querys);
-    
-    const { skip, take, cursor, where, orderBy } = querys;
+  @ApiResponse({ status: 200, description: '查询成功' , type: [UserDto] })
+  async getUsers(@Query() querys: PaginationDto): Promise<UserDto[]> {
+    const { skip, take } = querys;
     return this.userService.findMany({
       skip,
       take,
-      cursor,
-      where,
-      orderBy,
+      // cursor,
+      // where,
+      // orderBy,
     });
   }
 
@@ -94,9 +103,9 @@ export class UserController {
    */
   @Get('user/:id')
   @ApiOperation({ summary: '查询用户详情' })
-  @ApiResponse({ status: 200, description: '查询成功' })
+  @ApiResponse({ status: 200, description: '查询成功' , type: UserDto})
   @ApiResponse({ status: 404, description: '用户不存在' })
-  async getUserById(@Param('id') id: string) {
+  async getUserById(@Param('id') id: string): Promise<UserDto> {
     return await this.userService.findOneById(id);
   }
 
@@ -107,10 +116,13 @@ export class UserController {
    */
   @Patch('user/:id')
   @ApiOperation({ summary: '修改用户信息' })
-  @ApiResponse({ status: 200, description: '修改成功' })
+  @ApiResponse({ status: 200, description: '修改成功', type: UserDto  })
   @ApiResponse({ status: 404, description: '用户不存在' })
-  async updateUser(@Param('id') userId:string,@Body() updateUserDto:UpdateUserDto) {
-    return await this.userService.updateUserById(userId,updateUserDto);
+  async updateUser(
+    @Param('id') userId: string,
+    @Body() updateUserDto: UpdateUserDto,
+  ) {
+    return await this.userService.updateUserById(userId, updateUserDto);
   }
 
   /**
@@ -124,7 +136,7 @@ export class UserController {
   @ApiOperation({ summary: '删除用户' })
   @ApiResponse({ status: 200, description: '删除成功' })
   @ApiResponse({ status: 404, description: '用户不存在' })
-  async deleteUser(@Param('id') id: string) {
+  async deleteUserById(@Param('id') id: string) {
     const r = await this.userService.delete({ id });
     return r;
   }

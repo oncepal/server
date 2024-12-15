@@ -1,5 +1,5 @@
-import { Role } from '@libs/constants';
-import { ROLES_KEY } from '@libs/decorators/roles.decorator';
+import { ROLE } from '@libs/constants';
+import { ROLES_KEY } from '@libs/decorators/role.decorator';
 import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { UserService } from 'apps/main/src/user/user.service';
@@ -12,7 +12,7 @@ export class RoleGuard implements CanActivate {
     context: ExecutionContext,
   ): Promise<boolean> {
 
-    const requiredRoles = this.reflector.getAllAndMerge<Role[]>(ROLES_KEY,[context.getHandler(),context.getClass()])
+    const requiredRoles = this.reflector.getAllAndMerge<ROLE[]>(ROLES_KEY,[context.getHandler(),context.getClass()])
     if(!requiredRoles){
     return true;
 

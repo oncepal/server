@@ -2,7 +2,7 @@ import { BadRequestException, Inject, Injectable } from '@nestjs/common';
 import { PrismaService } from '@libs/prisma';
 import { $Enums, Prisma, User } from '@prisma/client';
 import { CaslAbilityFactory, ExtractSubjectType } from '@libs/casl/casl.factory';
-import { Action, Role } from '@libs/constants';
+import { Action } from '@libs/constants';
 import { AppSubjects } from '@libs/casl/casl.factory';
 
 @Injectable()

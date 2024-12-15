@@ -1,8 +1,39 @@
+//生成客户端
 generator client {
   provider        = "prisma-client-js"
   previewFeatures = ["prismaSchemaFolder"]
 }
 
+// 生成实体关系图
+generator erd {
+  provider                  = "prisma-erd-generator"
+  includeRelationFromFields = true
+  output                    = "../ERD.svg"
+}
+
+// 生成Dto
+generator nestjsDto {
+  provider                        = "prisma-generator-nestjs-dto"
+  output                          = "../dto"
+  outputToNestJsResourceStructure = "true"
+  flatResourceStructure           = "true"
+  exportRelationModifierClasses   = "false"
+  reExport                        = "true"
+  generateFileTypes               = "dto"
+  createDtoPrefix                 = "Create"
+  updateDtoPrefix                 = "Update"
+  dtoSuffix                       = "Dto"
+  entityPrefix                    = ""
+  entitySuffix                    = ""
+  classValidation                 = "true"
+  fileNamingStyle                 = "camel"
+  noDependencies                  = "false"
+  outputType                      = "class"
+  definiteAssignmentAssertion     = "false"
+  requiredResponseApiProperty     = "true"
+  prettier                        = "true"
+  outputApiPropertyType           = "true"
+}
 datasource db {
   provider = "mongodb"
   url      = env("MONGODB_URI")

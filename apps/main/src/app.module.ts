@@ -8,7 +8,7 @@ import { ChatroomModule } from './chatroom/chatroom.module';
 import { PostModule } from './post/post.module';
 import { UserModule } from './user/user.module';
 import { DemandModule } from './demand/demand.module';
-import { RolesModule } from './roles/roles.module';
+import { RoleModule } from './role/role.module';
 import { MenusModule } from './menus/menus.module';
 
 const isDev = process.env.NODE_ENV !== 'production';
@@ -35,8 +35,7 @@ const isDev = process.env.NODE_ENV !== 'production';
       },
     }),
     SwaggerModule,
-    RolesModule,
-    RolesModule,
+    RoleModule,
     MenusModule,
   ],
 })

@@ -15,23 +15,26 @@ model User {
   profile     Profile?
   status      UserStatus @default(OPEN)
   isSuperPal  Boolean    @default(false)
-  roles       String[]    @default(["USER"])
+  roles       String[]   @default(["USER"])
   views       Int        @default(0)
-  orders      Order[]
-  posts       Post[]
-  comments    Comment[]
+  /// @DtoReadOnly
+  createdAt   DateTime   @default(now()) 
+  updatedAt   DateTime   @default(now()) @updatedAt
 
-  followers Follow[] @relation("follower")
-  following Follow[] @relation("following")
+  followers   Follow[]   @relation("follower")
+  following   Follow[]   @relation("following")
 
   achievements   Achievement[] @relation(fields: [achievementIds], references: [id])
+  /// @DtoRelationIncludeId
   achievementIds String[]      @db.ObjectId
 
-  likes       Like[]
-  demands       Demand[]
   chatroom    Chatroom[] @relation(fields: [chatroomIds], references: [id])
+  /// @DtoRelationIncludeId
   chatroomIds String[]   @db.ObjectId
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now()) @updatedAt
+  likes    Like[]
+  demands  Demand[]
+  orders   Order[]
+  posts    Post[]
+  comments Comment[]
 }
