@@ -5,11 +5,11 @@ generator client {
 }
 
 // 生成实体关系图
-generator erd {
-  provider                  = "prisma-erd-generator"
-  includeRelationFromFields = true
-  output                    = "../ERD.svg"
-}
+// generator erd {
+//   provider                  = "prisma-erd-generator"
+//   includeRelationFromFields = true
+//   output                    = "../ERD.svg"
+// }
 
 // 生成Dto
 generator nestjsDto {

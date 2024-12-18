@@ -7,6 +7,7 @@ ONCEPAL后端Monorepos(Nest.js + MongoDB replica set + Prisma ORM).
 - Wechat 微信生态集成
 - RBAC 角色权限分配
 - Swagger 文档集成
+- Dto 自动生成
 - CASL 支持同构静态的权限控制
 - Filter/Sort 分页排序过滤
 - Response Interceptor 统一返回处理封装
@@ -83,7 +84,7 @@ pnpm install
 2. 生成 Prisma 客户端类型
     
 ```
-npm run db:generate
+npm run prisma
 ```
 
 3. 推送 MongoDB Schema （非必须）
