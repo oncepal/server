@@ -20,13 +20,14 @@ ONCEPAL后端Monorepos(Nest.js + MongoDB replica set + Prisma ORM).
 - Throttler 限流
 - WebSocket 实时通讯集成
 - CORS 跨域请求
-- Common 统一封装微服务统一架构
+- Common 微服务架构
 - Mongoose Schema 操作支持
 - Prisma ORM 集成 
 
 # 环境要求
 - Nest.js 10
 ```js
+// 全局安装cli
 npm i -g @nestjs/cli
 ```
 - Docker
@@ -40,38 +41,18 @@ npm i -g pnpm
 
 # 开发
 
-> ####如果很慢，记得在配置docker镜像源
+需要先在电脑上安装docker，安装对应的数据库。
+
+## 开启docker上的服务
+```bash
+docker-compose up -d
+```
+
+> 如果很慢或者报错，记得在配置docker镜像源
 >  "registry-mirrors": [
 >    "https://dockerproxy.com",
 >    "https://docker.m.daocloud.io"
 >  ]
-
-## MongoDB Replica Set 副本集
-<!-- 1. Create volume for each MongoDB node
-```bash
-docker volume create --name mongodb_repl_data1 -d local
-docker volume create --name mongodb_repl_data2 -d local
-docker volume create --name mongodb_repl_data3 -d local
-``` -->
-
-2. 创建启动docker服务
-```bash
-docker-compose up -d
-```
-<!-- 
-3. Start an interactive MongoDb shell session on the primary node
-```bash
-docker exec -it mongo0 mongosh --port 30000
-
-# in the shell
-config={"_id":"rs0","members":[{"_id":0,"host":"mongo0:30000"},{"_id":1,"host":"mongo1:30001"},{"_id":2,"host":"mongo2:30002"}]}
-rs.initiate(config);
-``` -->
-
-<!-- 1. Connect to MongoDB and check the status of the replica set
-```
-mongosh "mongodb://localhost:30000,localhost:30001,localhost:30002/?replicaSet=rs0"
-``` -->
 
 
 ## Nest
@@ -87,15 +68,18 @@ pnpm install
 npm run prisma
 ```
 
-3. 推送 MongoDB Schema （非必须）
-
-```
-npm run db:push
-```
-
-
-4. 启动主服务
+1. 启动主服务
 
 ```
 npm run dev
 ```
+
+# 项目结构
+
+代码整体还是一个基于package.json的正常node结构，根目录是一些常用的配置文件，比如typescript设置，git设置，env环境等，根目录的docker文件夹包含了docker相关的配置。
+
+由于是微服务架构，所以根目录下是apps文件夹，里面是对应的各个微服务，目前只有main这一个，main下面就是常规的nest文件目录，基于controller模块和server组织的。
+
+而每个微服务项目所需要的nest相关的中间件或者数据库controller，以及一些utils工具放在libs文件夹进行了统一封装。
+
+最后是根目录下的prisma，这里放了数据库字段schema还有生成的dto
