@@ -10,11 +10,13 @@ import { UserModule } from './user/user.module';
 import { DemandModule } from './demand/demand.module';
 import { RoleModule } from './role/role.module';
 import { MenusModule } from './menus/menus.module';
+import { TabooModule } from './taboo/taboo.module';
 
 const isDev = process.env.NODE_ENV !== 'production';
 
 @Module({
   imports: [
+    TabooModule,
     CommonModule,
     DemandModule,
     AuthModule,

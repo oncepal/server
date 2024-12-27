@@ -30,10 +30,10 @@ export class InvokeRecordInterceptor implements NestInterceptor {
  
     return next.handle().pipe(
       tap((res) => {
-        this.logger.debug(
-          `响应状态 ${response.statusCode} 共计: ${Date.now() - now}ms`,
-        );
-        this.logger.debug(`返回值: ${JSON.stringify(res)}`);
+        // this.logger.debug(
+        //   `响应状态 ${response.statusCode} 共计: ${Date.now() - now}ms`,
+        // );
+        // this.logger.debug(`返回值: ${JSON.stringify(res)}`);
       }),
     );
   }

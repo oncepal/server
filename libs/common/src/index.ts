@@ -51,8 +51,6 @@ export const startCommonServer = (
     app.useGlobalFilters(new HttpExceptionFilter());
     app.use(helmet());
     await app.listen(port);
-
-    console.log(`Server is running on http://localhost:${port}`);
   }
   starter();
 };
