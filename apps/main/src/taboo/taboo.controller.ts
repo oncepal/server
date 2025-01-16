@@ -28,9 +28,9 @@ import {
   ApiOperation,
   ApiResponse,
   IntersectionType,
-
 } from '@nestjs/swagger';
-import { UpdateTabooDto,CreateTabooDto,TabooDto } from 'prisma/dto';
+import { UpdateTabooDto, CreateTabooDto, TabooDto } from 'prisma/dto';
+import { ApiCustomResponse } from '@libs/decorators';
 
 @ApiTags('taboo')
 @Controller()
@@ -45,14 +45,15 @@ export class TabooController {
   @Post('taboo')
   @Header('content-type', 'application/json')
   @ApiOperation({ summary: '创建违禁词' })
-  @ApiResponse({ status: 200, description: '违禁词创建成功', type: TabooDto  })
+  @ApiResponse({ status: 200, description: '违禁词创建成功', type: TabooDto })
   @ApiResponse({ status: 400, description: '违禁词信息不完整' })
-  async createTaboo(@Body() createTabooDto: CreateTabooDto, @Res() res: Response) {
-    const existingTaboo = await this.tabooService.findOne(
-      {
-        name:createTabooDto.name
-      }
-    );
+  async createTaboo(
+    @Body() createTabooDto: CreateTabooDto,
+    @Res() res: Response,
+  ) {
+    const existingTaboo = await this.tabooService.findOne({
+      name: createTabooDto.name,
+    });
 
     if (!existingTaboo) {
       const newTaboo = await this.tabooService.create(createTabooDto);
@@ -78,10 +79,8 @@ export class TabooController {
    */
   @Get('taboos')
   @ApiOperation({ summary: '查询违禁词列表' })
-  @ApiResponse({ status: 200, description: '查询成功' , type: [TabooDto] })
+  @ApiCustomResponse(TabooDto, { status: 200, dataType: 'array' })
   async getTaboos(@Query() querys: PaginationDto): Promise<TabooDto[]> {
-    console.log("querys",querys);
-    
     const { skip, take } = querys;
     return this.tabooService.findMany({
       skip,
@@ -99,7 +98,7 @@ export class TabooController {
    */
   @Get('taboo/:id')
   @ApiOperation({ summary: '查询违禁词详情' })
-  @ApiResponse({ status: 200, description: '查询成功' , type: TabooDto})
+  @ApiResponse({ status: 200, description: '查询成功', type: TabooDto })
   @ApiResponse({ status: 404, description: '违禁词不存在' })
   async getTabooById(@Param('id') id: string): Promise<TabooDto> {
     return await this.tabooService.findOneById(id);
@@ -112,7 +111,7 @@ export class TabooController {
    */
   @Patch('taboo/:id')
   @ApiOperation({ summary: '修改违禁词信息' })
-  @ApiResponse({ status: 200, description: '修改成功', type: TabooDto  })
+  @ApiResponse({ status: 200, description: '修改成功', type: TabooDto })
   @ApiResponse({ status: 404, description: '违禁词不存在' })
   async updateTaboo(
     @Param('id') tabooId: string,

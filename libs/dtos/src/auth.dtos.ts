@@ -1,8 +1,22 @@
 import { ApiProperty } from '@nestjs/swagger';
-
+import { UserDto } from 'prisma/dto';
 export class LogInDto {
   @ApiProperty({ description: '手机号' })
   phoneNumber: string;
+}
+export class AuthInfoDto{
+  @ApiProperty({
+    type: 'string',
+  })
+  accessToken: string;
+  @ApiProperty({
+    type: 'string',
+  })
+  refreshToken: string;
+  @ApiProperty({
+    type: ()=>UserDto,
+  })
+  userInfo: UserDto;
 }
 
 export class LogOutDto {

@@ -19,7 +19,7 @@ export class TabooService {
       const createTaboo = await this.prismaService.taboo.create({ data: taboo });
       return createTaboo;
     } catch (error) {
-      throw new Error(`创建用户失败: ${error.message}`);
+      throw new Error(`${error.message}`);
     }
   }
 

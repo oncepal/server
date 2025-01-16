@@ -7,7 +7,7 @@ import {
 import { UserService } from '../user/user.service';
 import { JwtService } from '@nestjs/jwt';
 import { LogInDto, RegisterDto } from '@libs/dtos';
-import { Prisma, User, User as UsereModel } from '@prisma/client';
+import { Prisma, User, User as UserModel } from '@prisma/client';
 
 @Injectable()
 export class AuthService {
@@ -61,7 +61,7 @@ export class AuthService {
   }
 
   async generateAuthInfo(
-    userInfo: UsereModel,
+    userInfo: UserModel,
     isIncludingUserInfo: Boolean = true,
   ) {
     const tokens = {
@@ -74,7 +74,7 @@ export class AuthService {
     };
   }
 
-  async generateJwtTokens(userInfo: UsereModel, isRefresh: Boolean = false) {
+  async generateJwtTokens(userInfo: UserModel, isRefresh: Boolean = false) {
     let payload;
     if (isRefresh) payload = { userId: userInfo.id };
     else payload = { userId: userInfo.id, createdAt: userInfo.createdAt };
